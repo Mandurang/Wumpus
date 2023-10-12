@@ -10,7 +10,7 @@ namespace Wumpus
     {
         public void MovePlayer(int newX, int newY)
         {
-            GameLoop gameLoop = new GameLoop();
+            World gameLoop = new World();
 
             var visitedWorld = gameLoop.isVisitedWorld();
             var createdWorld = gameLoop.CreateWorld();
