@@ -4,49 +4,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Wumpus
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    namespace ConsoleApp1
+    public class Pit
     {
-        public class Pit
+        public int PitX { get; set; }
+        public int PitY { get; set; }
+
+        public Pit(int pitX, int pitY)
         {
-            public int PitX { get; set; }
-            public int PitY { get; set; }
+            PitX = pitX;
+            PitY = pitY;
+        }
+        public Pit() { }
 
-            public Pit(int pitX, int pitY)
+        public List<Pit> PlacePits(int quantityPit, Random random, char[][] MapSquare, int worldSize)
+        {
+            List<Pit> pits = new List<Pit>();
+
+            for (int i = 0; i < quantityPit; i++)
             {
-                PitX = pitX;
-                PitY = pitY;
-            }
-            public Pit() { }
+                int pitX, pitY;
 
-            public List<Pit> PlacePits(int quantityPit, Random random, char[][] MapSquare, int worldSize)
-            {
-                List<Pit> pits = new List<Pit>();
-
-                for (int i = 0; i < quantityPit; i++)
+                do
                 {
-                    int pitX, pitY;
+                    pitX = random.Next(worldSize);
+                    pitY = random.Next(worldSize);
+                } while (MapSquare[pitX][pitY] != '_');
+                MapSquare[pitX][pitY] = 'P';
 
-                    do
-                    {
-                        pitX = random.Next(worldSize);
-                        pitY = random.Next(worldSize);
-                    } while (MapSquare[pitX][pitY] != '_');
-                    MapSquare[pitX][pitY] = 'P';
+                pits.Add(new Pit(pitX, pitY));
 
-                    pits.Add(new Pit(pitX, pitY));
-
-                }
-                return pits;
             }
+            return pits;
         }
     }
-
 }
+
+
