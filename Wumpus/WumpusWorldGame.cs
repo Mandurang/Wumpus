@@ -13,13 +13,16 @@ namespace Wumpus
         public bool[][] Visited { get; set; }
         public int QuantityPits { get; set; }
         public int QuantityTreasure { get; set; }
+        public int QuantityWumpus { get; set; }
         public List<Treasure> Treasures { get; set; }
         public List<Pit> Pits { get; set; }
+
+        public List<Wumpus> Wumpuses { get; set; }
 
         public int playerX = 0;
         public int playerY = 0;
 
-        public int wumpusX, wumpusY;
+        //public int wumpusX, wumpusY;
 
         private bool wumpusSmell = false; // Флаг для запаха Wumpus.
         private bool pitWind = false;     // Флаг для драфта (яма).
@@ -30,6 +33,7 @@ namespace Wumpus
         {
             Pit pit = new Pit();
             Treasure treasure = new Treasure();
+            Wumpus wumpus  = new Wumpus();
 
             // Инициализация мира с заданным размером.
             MapSquare = new char[WorldSize][];
@@ -49,12 +53,13 @@ namespace Wumpus
 
             Pits = pit.PlacePits(QuantityPits, random, MapSquare, WorldSize);
 
-            do
-            {
-                wumpusX = random.Next(WorldSize);
-                wumpusY = random.Next(WorldSize);
-            } while (MapSquare[wumpusX][wumpusY] != '_');
-            MapSquare[wumpusX][wumpusY] = 'W';
+            Wumpuses = wumpus.PlaceWumpus(QuantityWumpus, random, MapSquare, WorldSize);
+            //do
+            //{
+            //    wumpusX = random.Next(WorldSize);
+            //    wumpusY = random.Next(WorldSize);
+            //} while (MapSquare[wumpusX][wumpusY] != '_');
+            //MapSquare[wumpusX][wumpusY] = 'W';
 
         }
 
@@ -66,7 +71,7 @@ namespace Wumpus
         public void CheckForWumpusSmell()
         {
             // Проверка на наличие запаха Wumpus в текущей комнате.
-            wumpusSmell = IsAdjacentToWumpus(playerX, playerY);
+            wumpusSmell = IsCloseToWumpus(playerX, playerY);
             if (wumpusSmell)
             {
                 Console.WriteLine("I smell a Wumpus");
@@ -76,23 +81,28 @@ namespace Wumpus
         public void CheckForPitWind()
         {
             // Проверка на наличие ветра (яма) в текущей комнате.
-            pitWind = IsAdjacentToPit(playerX, playerY);
+            pitWind = IsCloseToPit(playerX, playerY);
             if (pitWind)
             {
                 Console.WriteLine("I feel a wind");
             }
         }
 
-        private bool IsAdjacentToWumpus(int x, int y)
+        private bool IsCloseToWumpus(int x, int y)
         {
             // Проверка на соседство с Wumpus.
-            return (Math.Abs(x - wumpusX) == 1 && y == wumpusY) || (x == wumpusX && Math.Abs(y - wumpusY) == 1);
+            return IsWumpus(x - 1, y) || IsWumpus(x + 1, y) || IsWumpus(x, y - 1) || IsWumpus(x, y + 1);
         }
 
-        private bool IsAdjacentToPit(int x, int y)
+        private bool IsCloseToPit(int x, int y)
         {
             // Проверка на соседство с ямами.
             return IsPit(x - 1, y) || IsPit(x + 1, y) || IsPit(x, y - 1) || IsPit(x, y + 1);
+        }
+
+        private bool IsWumpus(int x, int y)
+        {
+            return IsValid(x, y) && MapSquare[x][y] == 'W';
         }
 
         private bool IsPit(int x, int y)
@@ -143,7 +153,7 @@ namespace Wumpus
 
         public void MovePlayer(int newX, int newY)
         {
-            if (!IsValid(newX, newY) || Visited[newX][newY])
+            if (!IsValid(newX, newY))
             {
                 Console.WriteLine("Invalid move.");
                 return;
