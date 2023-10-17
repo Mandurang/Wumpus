@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Wumpus
 {
-    public class Treasure
+    public class Treasure : IPlace<Treasure>
     {
         public int TreasureX { get; set; }
         public int TreasureY { get; set; }
@@ -20,7 +20,7 @@ namespace Wumpus
 
         public Treasure() { }
 
-        public List<Treasure> PlaceTreasure(int quantityTreasure, Random random, char[][] MapSquare, int worldSize)
+        public List<Treasure> Place(int quantityTreasure, Random random, char[][] MapSquare, int worldSize)
         {
             List<Treasure> treasures = new List<Treasure>();
 

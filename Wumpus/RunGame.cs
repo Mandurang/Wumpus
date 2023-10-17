@@ -14,6 +14,7 @@ namespace Wumpus
             Console.WriteLine("Welcome to Wumpus World!");
             Console.WriteLine("Legend: ? - Unexplored, _ - Empty, @ - Player, P - Pit, W - Wumpus, G - Gold");
             wumpusWorld.SetWorldSize();
+            wumpusWorld.SetQuantityWupus();
             wumpusWorld.SetQuantityPits();
             wumpusWorld.SetQuantityTreasure();
             wumpusWorld.GenerateWorld(); // Генерация случайного мира.

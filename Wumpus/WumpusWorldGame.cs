@@ -16,7 +16,6 @@ namespace Wumpus
         public int QuantityWumpus { get; set; }
         public List<Treasure> Treasures { get; set; }
         public List<Pit> Pits { get; set; }
-
         public List<Wumpus> Wumpuses { get; set; }
 
         public int playerX = 0;
@@ -31,9 +30,10 @@ namespace Wumpus
 
         public void GenerateWorld()
         {
-            Pit pit = new Pit();
-            Treasure treasure = new Treasure();
-            Wumpus wumpus  = new Wumpus();
+            Pit pits = new Pit();
+            Treasure treasures = new Treasure();
+            Wumpus wumpuses = new Wumpus();
+
 
             // Инициализация мира с заданным размером.
             MapSquare = new char[WorldSize][];
@@ -49,11 +49,12 @@ namespace Wumpus
                 }
             }
 
-            Treasures = treasure.PlaceTreasure(QuantityTreasure, random, MapSquare, WorldSize);
+            
+            Treasures = treasures.Place(QuantityTreasure, random, MapSquare, WorldSize);
 
-            Pits = pit.PlacePits(QuantityPits, random, MapSquare, WorldSize);
+            Pits = pits.Place(QuantityPits, random, MapSquare, WorldSize);
 
-            Wumpuses = wumpus.PlaceWumpus(QuantityWumpus, random, MapSquare, WorldSize);
+            Wumpuses = wumpuses.Place(QuantityWumpus, random, MapSquare, WorldSize);
 
         }
 
@@ -102,6 +103,13 @@ namespace Wumpus
         private bool IsPit(int x, int y)
         {
             return IsValid(x, y) && MapSquare[x][y] == 'P';
+        }
+
+        public void SetQuantityWupus()
+        {
+            Console.Write("Enter your quantity Wumpus: ");
+            int quantityWupus = Int32.Parse(Console.ReadLine());
+            QuantityWumpus = quantityWupus;
         }
 
         public void SetQuantityPits()
