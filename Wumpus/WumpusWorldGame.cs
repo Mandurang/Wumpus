@@ -54,12 +54,6 @@ namespace Wumpus
             Pits = pit.PlacePits(QuantityPits, random, MapSquare, WorldSize);
 
             Wumpuses = wumpus.PlaceWumpus(QuantityWumpus, random, MapSquare, WorldSize);
-            //do
-            //{
-            //    wumpusX = random.Next(WorldSize);
-            //    wumpusY = random.Next(WorldSize);
-            //} while (MapSquare[wumpusX][wumpusY] != '_');
-            //MapSquare[wumpusX][wumpusY] = 'W';
 
         }
 
