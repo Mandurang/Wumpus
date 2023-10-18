@@ -14,9 +14,12 @@ namespace Wumpus
         public int QuantityPits { get; set; }
         public int QuantityTreasure { get; set; }
         public int QuantityWumpus { get; set; }
+        public int QuantityBets { get; set; }
         public List<Treasure> Treasures { get; set; }
         public List<Pit> Pits { get; set; }
         public List<Wumpus> Wumpuses { get; set; }
+
+        public List<Bet> Bets { get; set; }
 
         public Player Player { get; set; }
 
@@ -27,9 +30,11 @@ namespace Wumpus
 
         private Random random = new Random();
 
+        private Placer placer = new Placer();
+
         public void GenerateWorld()
         {
-            Placer placer = new Placer();
+            
 
             // Инициализация мира с заданным размером.
             MapSquare = new char[WorldSize][];
@@ -51,6 +56,8 @@ namespace Wumpus
 
             Wumpuses = placer.PlaceWumpus(QuantityWumpus, random, MapSquare, WorldSize);
 
+            Bets = placer.PlaceBet(QuantityBets, random, MapSquare, WorldSize);
+
             Player = placer.PlacePlayer(random, MapSquare, WorldSize);
 
         }
@@ -63,7 +70,7 @@ namespace Wumpus
         public void CheckForWumpusSmell()
         {
             // Проверка на наличие запаха Wumpus в текущей комнате.
-            wumpusSmell = IsCloseToWumpus(Player.PlayerX, Player.PlayerY);
+            wumpusSmell = IsCloseToWumpus(Player.X, Player.Y);
             if (wumpusSmell)
             {
                 Console.WriteLine("I smell a Wumpus");
@@ -73,7 +80,7 @@ namespace Wumpus
         public void CheckForPitWind()
         {
             // Проверка на наличие ветра (яма) в текущей комнате.
-            pitWind = IsCloseToPit(Player.PlayerX, Player.PlayerY);
+            pitWind = IsCloseToPit(Player.X, Player.Y);
             if (pitWind)
             {
                 Console.WriteLine("I feel a wind");
@@ -123,6 +130,13 @@ namespace Wumpus
             QuantityPits = quantityTreasure;
         }
 
+        public void SetQuantityBet()
+        {
+            Console.Write("Enter your quantity bet: ");
+            int quantityBet = Int32.Parse(Console.ReadLine());
+            QuantityBets = quantityBet;
+        }
+
 
         public void SetWorldSize()
         {
@@ -139,7 +153,7 @@ namespace Wumpus
             {
                 for (int j = 0; j < WorldSize; j++)
                 {
-                    if (i == Player.PlayerX && j == Player.PlayerY)
+                    if (i == Player.X && j == Player.Y)
                         Console.Write("@ ");
                     else if (Visited[i][j])
                         Console.Write(MapSquare[i][j] + " ");
@@ -158,23 +172,30 @@ namespace Wumpus
                 return;
             }
 
-            Visited[Player.PlayerX][Player.PlayerY] = true;
-            Player.PlayerX = newX;
-            Player.PlayerY = newY;
+            Visited[Player.X][Player.Y] = true;
+            Player.X = newX;
+            Player.Y = newY;
 
-            if (MapSquare[Player.PlayerX][Player.PlayerY] == 'P')
+            if (MapSquare[Player.X][Player.Y] == 'P')
             {
                 Console.WriteLine("Game over! You fell into a pit.");
                 Environment.Exit(0);
             }
 
-            if (MapSquare[Player.PlayerX][Player.PlayerY] == 'W')
+            if (MapSquare[Player.X][Player.Y] == 'W')
             {
                 Console.WriteLine("Game over! Encountered the Wumpus.");
                 Environment.Exit(0);
             }
 
-            else if (MapSquare[Player.PlayerX][Player.PlayerY] == 'G')
+            if (MapSquare[Player.X][Player.Y] == 'B')
+            {
+                Console.WriteLine("Go to! Encountered the Bet.");
+                Player.X = random.Next(WorldSize);
+                Player.Y = random.Next(WorldSize);
+            }
+
+            else if (MapSquare[Player.X][Player.Y] == 'G')
             {
                 Console.WriteLine("Congratulations! You found the treasure and won the game.");
                 Environment.Exit(0);

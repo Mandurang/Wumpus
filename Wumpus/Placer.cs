@@ -22,7 +22,7 @@ namespace Wumpus
                 X = random.Next(worldSize);
                 Y = random.Next(worldSize);
             } while (MapSquare[X][Y] != '_');
-            Player player = new Player { PlayerX = X, PlayerY = Y};
+            Player player = new Player { X = X, Y = Y};
             return player;
         }
 
@@ -39,6 +39,10 @@ namespace Wumpus
             return PlaceMapObject<Treasure>(quantityTreasure, random, MapSquare, worldSize, 'G');
         }
 
+        public List<Bet> PlaceBet(int quantityBet, Random random, char[][] MapSquare, int worldSize)
+        {
+            return PlaceMapObject<Bet>(quantityBet, random, MapSquare, worldSize, 'B');
+        }
 
         private List<T> PlaceMapObject<T>(int quantity, Random random, char[][] MapSquare, int worldSize, char symbol) where T : MapObject, new()
         {

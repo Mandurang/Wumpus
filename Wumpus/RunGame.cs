@@ -17,6 +17,7 @@ namespace Wumpus
             wumpusWorld.SetQuantityWupus();
             wumpusWorld.SetQuantityPits();
             wumpusWorld.SetQuantityTreasure();
+            wumpusWorld.SetQuantityBet();
             wumpusWorld.GenerateWorld(); // Генерация случайного мира.
             wumpusWorld.PrintWorld();
             wumpusWorld.CheckForWumpusSmell(); // Проверка запаха Wumpus при старте игры.
@@ -28,8 +29,8 @@ namespace Wumpus
                 char move = Console.ReadKey().KeyChar;
                 Console.WriteLine();
 
-                int newX = wumpusWorld.Player.PlayerX;
-                int newY = wumpusWorld.Player.PlayerY;
+                int newX = wumpusWorld.Player.X;
+                int newY = wumpusWorld.Player.Y;
 
                 switch (move)
                 {
@@ -42,7 +43,7 @@ namespace Wumpus
                     case 'S':
                         newX++;
                         break;
-                    case 'D':
+                    case 'D' :
                         newY++;
                         break;
                     default:

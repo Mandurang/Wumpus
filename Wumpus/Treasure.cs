@@ -9,13 +9,13 @@ namespace Wumpus
 {
     public class Treasure : MapObject
     {
-        public int TreasureX { get; set; }
-        public int TreasureY { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
 
-        public Treasure(int treasureX, int treasureY)
+        public Treasure(int X, int Y)
         {
-            TreasureX = treasureX;
-            TreasureY = treasureY;
+            this.X = X;
+            this.Y = Y;
         }
 
         public Treasure() { }

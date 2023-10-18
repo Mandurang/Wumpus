@@ -9,13 +9,13 @@ namespace Wumpus
 {
     public class Pit : MapObject
     {
-        public int PitX { get; set; }
-        public int PitY { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
 
-        public Pit(int pitX, int pitY)
+        public Pit(int X, int Y)
         {
-            PitX = pitX;
-            PitY = pitY;
+            this.X = X;
+            this.Y = Y;
         }
         public Pit() { }
     }

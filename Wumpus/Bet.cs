@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 
 namespace Wumpus
 {
-    public class Wumpus : MapObject
+    public class Bet : MapObject
     {
         public int X { get; set; }
         public int Y { get; set; }
 
-        public Wumpus(int X, int Y)
+        public Bet(int X, int Y)
         {
-            this.X = X;
-            this.Y = Y;
+            X = X;
+            Y = Y;
         }
-        public Wumpus() { }
-
+        public Bet() { }
     }
 }

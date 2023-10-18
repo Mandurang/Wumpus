@@ -8,12 +8,7 @@ namespace Wumpus
 {
     public class Player
     {
-        public int PlayerX { get; set; }
-        public int PlayerY { get; set; }
-
-        
-
-        
-         
+        public int X { get; set; }
+        public int Y { get; set; }
     }
 }
