@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace Wumpus
 {
-    public interface IPlace<T>
+    public class Player
     {
-        List<T> Place(int quantityTreasure, Random random, char[][] MapSquare, int worldSize);
+        public int PlayerX { get; set; }
+        public int PlayerY { get; set; }
+
+        
+
+        
+         
     }
 }

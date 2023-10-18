@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Wumpus
 {
-    public class Treasure : IPlace<Treasure>
+    public class Treasure : MapObject
     {
         public int TreasureX { get; set; }
         public int TreasureY { get; set; }
@@ -20,25 +20,6 @@ namespace Wumpus
 
         public Treasure() { }
 
-        public List<Treasure> Place(int quantityTreasure, Random random, char[][] MapSquare, int worldSize)
-        {
-            List<Treasure> treasures = new List<Treasure>();
-
-            for (int i = 0; i < quantityTreasure; i++)
-            {
-                int treasureX, treasureY;
-
-                do
-                {
-                    treasureX = random.Next(worldSize);
-                    treasureY = random.Next(worldSize);
-                } while (MapSquare[treasureX][treasureY] != '_');
-                MapSquare[treasureX][treasureY] = 'G';
-
-                treasures.Add(new Treasure(treasureX, treasureY));
-
-            }
-            return treasures;
-        }
+        
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Wumpus
 {
-    public class Wumpus : IPlace<Wumpus>
+    public class Wumpus : MapObject
     {
         public int WumpusX { get; set; }
         public int WumpusY { get; set; }
@@ -18,25 +18,5 @@ namespace Wumpus
         }
         public Wumpus() { }
 
-        public List<Wumpus> Place(int quantityWumpus, Random random, char[][] MapSquare, int worldSize)
-        {
-            List<Wumpus> wumpus = new List<Wumpus>();
-
-            for (int i = 0; i < quantityWumpus; i++)
-            {
-                int wumpusX, wumpusY;
-
-                do
-                {
-                    wumpusX = random.Next(worldSize);
-                    wumpusY = random.Next(worldSize);
-                } while (MapSquare[wumpusX][wumpusY] != '_');
-                MapSquare[wumpusX][wumpusY] = 'W';
-
-                wumpus.Add(new Wumpus(wumpusX, wumpusY));
-
-            }
-            return wumpus;
-        }
     }
 }

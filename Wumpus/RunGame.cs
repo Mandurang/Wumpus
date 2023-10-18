@@ -28,8 +28,8 @@ namespace Wumpus
                 char move = Console.ReadKey().KeyChar;
                 Console.WriteLine();
 
-                int newX = wumpusWorld.playerX;
-                int newY = wumpusWorld.playerY;
+                int newX = wumpusWorld.Player.PlayerX;
+                int newY = wumpusWorld.Player.PlayerY;
 
                 switch (move)
                 {
