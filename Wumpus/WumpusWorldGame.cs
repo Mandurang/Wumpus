@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,15 +19,14 @@ namespace Wumpus
         public List<Treasure> Treasures { get; set; }
         public List<Pit> Pits { get; set; }
         public List<Wumpus> Wumpuses { get; set; }
-
         public List<Bet> Bets { get; set; }
-
         public Player Player { get; set; }
-
-        //public int wumpusX, wumpusY;
+        public Wumpus Wumpus { get; set; }
 
         private bool wumpusSmell = false; // Флаг для запаха Wumpus.
+
         private bool pitWind = false;     // Флаг для драфта (яма).
+        private bool betSound = false;     // Флаг для скрежита крильев (bet).
 
         private Random random = new Random();
 
@@ -34,8 +34,6 @@ namespace Wumpus
 
         public void GenerateWorld()
         {
-            
-
             // Инициализация мира с заданным размером.
             MapSquare = new char[WorldSize][];
             Visited = new bool[WorldSize][];
@@ -87,6 +85,22 @@ namespace Wumpus
             }
         }
 
+        public void CheckForBetsSound()
+        {
+            // Проверка на наличие скрежита крыльев в соседней  комнате.
+            betSound = IsCloseToBet(Player.X, Player.Y);
+            if (betSound)
+            {
+                Console.WriteLine("Bats nearby");
+            }
+        }
+
+        private bool IsCloseToBet(int x, int y)
+        {
+            // Проверка на соседство с Wumpus.
+            return IsBet(x - 1, y) || IsBet(x + 1, y) || IsBet(x, y - 1) || IsBet(x, y + 1);
+        }
+
         private bool IsCloseToWumpus(int x, int y)
         {
             // Проверка на соседство с Wumpus.
@@ -102,6 +116,11 @@ namespace Wumpus
         private bool IsWumpus(int x, int y)
         {
             return IsValid(x, y) && MapSquare[x][y] == 'W';
+        }
+
+        private bool IsBet(int x, int y)
+        {
+            return IsValid(x, y) && MapSquare[x][y] == 'B';
         }
 
         private bool IsPit(int x, int y)
@@ -204,6 +223,74 @@ namespace Wumpus
             PrintWorld();
             CheckForWumpusSmell(); // Проверка запаха Wumpus после перемещения игрока.
             CheckForPitWind();    // Проверка ветра (яма) после перемещения игрока.
+            CheckForBetsSound();
+        }
+
+        public void ShootArrow(int directionX, int directionY)
+        {
+            if (Player.QuantityArrow > 0)
+            {
+                Player.QuantityArrow--;
+                Console.WriteLine(" - Direction. You shoot an arrow!");
+
+                int x = Player.X;
+                int y = Player.Y;
+
+                for (int i = 0; i < 5; i++)
+                {
+                    x += directionX;
+                    y += directionY;
+
+                    if (IsValid(x, y) && MapSquare[x][y] == 'W')
+                    {
+                        Console.WriteLine("Congratulations! You shot the Wumpus and won the game.");
+                        Environment.Exit(0);
+                    }
+                }
+
+                Console.WriteLine("You missed. The Wumpus is still alive.");
+            }
+            else
+            {
+                Console.WriteLine("Out of arrows!");
+            }
+        }
+
+        public void RandomMoveWumpus()
+        {
+            foreach (var wumpus in Wumpuses)
+            {
+                int chanceMoveWumpus = random.Next(1, 4);
+                
+                if (chanceMoveWumpus == 1 || chanceMoveWumpus == 2 || chanceMoveWumpus == 3)
+                {
+                    //Console.WriteLine("I raised!");
+                    MapSquare[wumpus.X][wumpus.Y] = '_';
+                    
+                    do
+                    {
+                        int randomMove = random.Next(1, 4);
+                        switch (randomMove)
+                        {
+                            case 1:
+                                wumpus.X += -1;
+                                continue;
+                            case 2:
+                                wumpus.Y += -1;
+                                continue;
+                            case 3:
+                                wumpus.X += 1;
+                                continue;
+                            case 4:
+                                wumpus.Y += 1;
+                                continue;
+                        }
+                    } while (!IsValid(wumpus.X, wumpus.Y));
+
+                    MapSquare[wumpus.X][wumpus.Y] = 'W';
+                    continue;
+                }
+            }
         }
     }
 }

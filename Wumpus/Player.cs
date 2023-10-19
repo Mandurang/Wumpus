@@ -10,5 +10,8 @@ namespace Wumpus
     {
         public int X { get; set; }
         public int Y { get; set; }
+
+        public int QuantityArrow { get; set; } = 4;
+
     }
 }
