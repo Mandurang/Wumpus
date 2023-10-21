@@ -44,7 +44,7 @@ namespace Wumpus
                 for (int j = 0; j < WorldSize; j++)
                 {
                     MapSquare[i][j] = '_';
-                    Visited[i][j] = false;
+                    Visited[i][j] = true;
                 }
             }
 
@@ -156,7 +156,6 @@ namespace Wumpus
             QuantityBets = quantityBet;
         }
 
-
         public void SetWorldSize()
         {
             Console.Write("Enter your size world: ");
@@ -174,6 +173,8 @@ namespace Wumpus
                 {
                     if (i == Player.X && j == Player.Y)
                         Console.Write("@ ");
+
+                    //Console.Write(MapSquare[i][j] + " ");
                     else if (Visited[i][j])
                         Console.Write(MapSquare[i][j] + " ");
                     else
@@ -260,35 +261,38 @@ namespace Wumpus
         {
             foreach (var wumpus in Wumpuses)
             {
+
+                int newX = wumpus.X;
+                int newY = wumpus.Y;
                 int chanceMoveWumpus = random.Next(1, 4);
-                
+
                 if (chanceMoveWumpus == 1 || chanceMoveWumpus == 2 || chanceMoveWumpus == 3)
                 {
                     //Console.WriteLine("I raised!");
-                    MapSquare[wumpus.X][wumpus.Y] = '_';
-                    
+
                     do
                     {
-                        int randomMove = random.Next(1, 4);
+                        int randomMove = random.Next(1, 5);
                         switch (randomMove)
                         {
                             case 1:
-                                wumpus.X += -1;
+                                newX = wumpus.X - 1;
                                 continue;
                             case 2:
-                                wumpus.Y += -1;
+                                newY = wumpus.Y - 1;
                                 continue;
                             case 3:
-                                wumpus.X += 1;
+                                newX = wumpus.X + 1;
                                 continue;
                             case 4:
-                                wumpus.Y += 1;
+                                newY = wumpus.Y - 1;
                                 continue;
                         }
-                    } while (!IsValid(wumpus.X, wumpus.Y));
-
+                    } while (!IsValid(newX, newY));
+                    MapSquare[wumpus.X][wumpus.Y] = '_';
+                    wumpus.X = newX;
+                    wumpus.Y = newY;
                     MapSquare[wumpus.X][wumpus.Y] = 'W';
-                    continue;
                 }
             }
         }

@@ -30,10 +30,12 @@ namespace Wumpus
         {
             return PlaceMapObject<Wumpus>(quantityWumpus, random, MapSquare, worldSize, 'W');
         }
+
         public List<Pit> PlacePit(int quantityPit, Random random, char[][] MapSquare, int worldSize)
         {
             return PlaceMapObject<Pit>(quantityPit, random, MapSquare, worldSize, 'P');
         }
+
         public List<Treasure> PlaceTreasure(int quantityTreasure, Random random, char[][] MapSquare, int worldSize)
         {
             return PlaceMapObject<Treasure>(quantityTreasure, random, MapSquare, worldSize, 'G');
