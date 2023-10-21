@@ -26,8 +26,6 @@ namespace Wumpus
 
             while (true)
             {
-                
-
                 Console.Write("Enter your move (W/A/S/D) or 'F' to shoot: ");
                 char move = Console.ReadKey().KeyChar;
                 Console.WriteLine();

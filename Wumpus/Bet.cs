@@ -8,9 +8,6 @@ namespace Wumpus
 {
     public class Bet : MapObject
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-
         public Bet(int X, int Y)
         {
             X = X;

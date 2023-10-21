@@ -9,9 +9,6 @@ namespace Wumpus
 {
     public class Pit : MapObject
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-
         public Pit(int X, int Y)
         {
             this.X = X;

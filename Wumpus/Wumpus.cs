@@ -8,9 +8,6 @@ namespace Wumpus
 {
     public class Wumpus : MapObject
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-
         public Wumpus(int X, int Y)
         {
             this.X = X;
