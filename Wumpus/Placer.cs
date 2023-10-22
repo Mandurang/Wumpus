@@ -6,12 +6,6 @@ using System.Threading.Tasks;
 
 namespace Wumpus
 {
-    public class MapObject
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
-    }
-
     public class Placer 
     {
         public Player PlacePlayer(Random random, char[][] MapSquare, int worldSize)

@@ -44,7 +44,7 @@ namespace Wumpus
                 for (int j = 0; j < WorldSize; j++)
                 {
                     MapSquare[i][j] = '_';
-                    Visited[i][j] = true;
+                    Visited[i][j] = false;
                 }
             }
 
@@ -186,8 +186,6 @@ namespace Wumpus
                 {
                     if (i == Player.X && j == Player.Y)
                         Console.Write("@ ");
-
-                    //Console.Write(MapSquare[i][j] + " ");
                     else if (Visited[i][j])
                         Console.Write(MapSquare[i][j] + " ");
                     else

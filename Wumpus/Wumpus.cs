@@ -14,6 +14,5 @@ namespace Wumpus
             this.Y = Y;
         }
         public Wumpus() { }
-
     }
 }
