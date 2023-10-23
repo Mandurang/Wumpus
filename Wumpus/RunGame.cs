@@ -14,10 +14,10 @@ namespace Wumpus
             Console.WriteLine("Welcome to Wumpus World!");
             Console.WriteLine("Legend: ? - Unexplored, _ - Empty, P - Player, P - Pit, W - Wumpus, B - Bets, G - Gold");
             wumpusWorld.SetWorldSize();
-            wumpusWorld.SetQuantityWupus();
+            wumpusWorld.SetQuantityWupuses();
             wumpusWorld.SetQuantityPits();
-            wumpusWorld.SetQuantityTreasure();
-            wumpusWorld.SetQuantityBet();
+            wumpusWorld.SetQuantityTreasures();
+            wumpusWorld.SetQuantityBats();
             wumpusWorld.GenerateWorld(); // Генерация случайного мира.
             wumpusWorld.PrintWorld();
             wumpusWorld.CheckForWumpusSmell(); // Проверка запаха Wumpus при старте игры.

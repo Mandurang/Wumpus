@@ -15,11 +15,11 @@ namespace Wumpus
         public int QuantityPits { get; set; }
         public int QuantityTreasure { get; set; }
         public int QuantityWumpus { get; set; }
-        public int QuantityBets { get; set; }
+        public int QuantityBats { get; set; }
         public List<Treasure> Treasures { get; set; }
         public List<Pit> Pits { get; set; }
         public List<Wumpus> Wumpuses { get; set; }
-        public List<Bet> Bets { get; set; }
+        public List<Bat> Bets { get; set; }
         public Player Player { get; set; }
         public Wumpus Wumpus { get; set; }
 
@@ -48,13 +48,13 @@ namespace Wumpus
                 }
             }
 
-            Treasures = placer.PlaceTreasure(QuantityTreasure, random, MapSquare, WorldSize);
+            Treasures = placer.PlaceTreasures(QuantityTreasure, random, MapSquare, WorldSize);
 
-            Pits = placer.PlacePit(QuantityPits, random, MapSquare, WorldSize);
+            Pits = placer.PlacePits(QuantityPits, random, MapSquare, WorldSize);
 
-            Wumpuses = placer.PlaceWumpus(QuantityWumpus, random, MapSquare, WorldSize);
+            Wumpuses = placer.PlaceWumpuses(QuantityWumpus, random, MapSquare, WorldSize);
 
-            Bets = placer.PlaceBet(QuantityBets, random, MapSquare, WorldSize);
+            Bets = placer.PlaceBats(QuantityBats, random, MapSquare, WorldSize);
 
             Player = placer.PlacePlayer(random, MapSquare, WorldSize);
 
@@ -101,17 +101,17 @@ namespace Wumpus
         public void CheckForBetsSound()
         {
             // Проверка на наличие скрежита крыльев в соседней  комнате.
-            betSound = IsCloseToBet(Player.X, Player.Y);
+            betSound = IsCloseToBat(Player.X, Player.Y);
             if (betSound)
             {
                 Console.WriteLine("Bats nearby");
             }
         }
 
-        private bool IsCloseToBet(int x, int y)
+        private bool IsCloseToBat(int x, int y)
         {
             // Проверка на соседство с Wumpus.
-            return IsBet(x - 1, y) || IsBet(x + 1, y) || IsBet(x, y - 1) || IsBet(x, y + 1);
+            return IsBat(x - 1, y) || IsBat(x + 1, y) || IsBat(x, y - 1) || IsBat(x, y + 1);
         }
 
         private bool IsCloseToWumpus(int x, int y)
@@ -131,7 +131,7 @@ namespace Wumpus
             return IsValid(x, y) && MapSquare[x][y] == 'W';
         }
 
-        private bool IsBet(int x, int y)
+        private bool IsBat(int x, int y)
         {
             return IsValid(x, y) && MapSquare[x][y] == 'B';
         }
@@ -141,9 +141,9 @@ namespace Wumpus
             return IsValid(x, y) && MapSquare[x][y] == 'P';
         }
 
-        public void SetQuantityWupus()
+        public void SetQuantityWupuses()
         {
-            Console.Write("Enter your quantity Wumpus: ");
+            Console.Write("Enter your quantity Wumpuses: ");
             int quantityWupus = Int32.Parse(Console.ReadLine());
             QuantityWumpus = quantityWupus;
         }
@@ -155,18 +155,18 @@ namespace Wumpus
             QuantityPits = quantityPits;
         }
 
-        public void SetQuantityTreasure()
+        public void SetQuantityTreasures()
         {
-            Console.Write("Enter your quantity treasure: ");
+            Console.Write("Enter your quantity treasures: ");
             int quantityTreasure = Int32.Parse(Console.ReadLine());
             QuantityPits = quantityTreasure;
         }
 
-        public void SetQuantityBet()
+        public void SetQuantityBats()
         {
-            Console.Write("Enter your quantity bet: ");
-            int quantityBet = Int32.Parse(Console.ReadLine());
-            QuantityBets = quantityBet;
+            Console.Write("Enter your quantity bats: ");
+            int quantityBats = Int32.Parse(Console.ReadLine());
+            QuantityBats = quantityBats;
         }
 
         public void SetWorldSize()

@@ -8,39 +8,39 @@ namespace Wumpus
 {
     public class Placer 
     {
-        public Player PlacePlayer(Random random, char[][] MapSquare, int worldSize)
+        public Player PlacePlayer(Random random, char[][] mapSquare, int worldSize)
         {
             int X, Y;
             do
             {
                 X = random.Next(worldSize);
                 Y = random.Next(worldSize);
-            } while (MapSquare[X][Y] != '_');
+            } while (mapSquare[X][Y] != '_');
             Player player = new Player { X = X, Y = Y};
             return player;
         }
 
-        public List<Wumpus> PlaceWumpus(int quantityWumpus, Random random, char[][] MapSquare, int worldSize)
+        public List<Wumpus> PlaceWumpuses(int quantityWumpuses, Random random, char[][] mapSquare, int worldSize)
         {
-            return PlaceMapObject<Wumpus>(quantityWumpus, random, MapSquare, worldSize, 'W');
+            return PlaceMapObject<Wumpus>(quantityWumpuses, random, mapSquare, worldSize, 'W');
         }
 
-        public List<Pit> PlacePit(int quantityPit, Random random, char[][] MapSquare, int worldSize)
+        public List<Pit> PlacePits(int quantityPits, Random random, char[][] mapSquare, int worldSize)
         {
-            return PlaceMapObject<Pit>(quantityPit, random, MapSquare, worldSize, 'P');
+            return PlaceMapObject<Pit>(quantityPits, random, mapSquare, worldSize, 'P');
         }
 
-        public List<Treasure> PlaceTreasure(int quantityTreasure, Random random, char[][] MapSquare, int worldSize)
+        public List<Treasure> PlaceTreasures(int quantityTreasures, Random random, char[][] mapSquare, int worldSize)
         {
-            return PlaceMapObject<Treasure>(quantityTreasure, random, MapSquare, worldSize, 'G');
+            return PlaceMapObject<Treasure>(quantityTreasures, random, mapSquare, worldSize, 'G');
         }
 
-        public List<Bet> PlaceBet(int quantityBet, Random random, char[][] MapSquare, int worldSize)
+        public List<Bat> PlaceBats(int quantityBats, Random random, char[][] mapSquare, int worldSize)
         {
-            return PlaceMapObject<Bet>(quantityBet, random, MapSquare, worldSize, 'B');
+            return PlaceMapObject<Bat>(quantityBats, random, mapSquare, worldSize, 'B');
         }
 
-        private List<T> PlaceMapObject<T>(int quantity, Random random, char[][] MapSquare, int worldSize, char symbol) where T : MapObject, new()
+        private List<T> PlaceMapObject<T>(int quantity, Random random, char[][] mapSquare, int worldSize, char symbol) where T : MapObject, new()
         {
             List<T> mapObjects = new List<T>();
 
@@ -52,8 +52,8 @@ namespace Wumpus
                 {
                     X = random.Next(worldSize);
                     Y = random.Next(worldSize);
-                } while (MapSquare[X][Y] != '_');
-                MapSquare[X][Y] = symbol;
+                } while (mapSquare[X][Y] != '_');
+                mapSquare[X][Y] = symbol;
                 T newObject = new T { X = X, Y = Y };
                 mapObjects.Add(newObject);
 

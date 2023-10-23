@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Wumpus
 {
-    public class Bet : MapObject
+    public class Bat : MapObject
     {
-        public Bet(int X, int Y)
+        public Bat(int X, int Y)
         {
             X = X;
             Y = Y;
         }
-        public Bet() { }
+        public Bat() { }
     }
 }
