@@ -19,7 +19,7 @@ namespace Wumpus
         public List<Treasure> Treasures { get; set; }
         public List<Pit> Pits { get; set; }
         public List<Wumpus> Wumpuses { get; set; }
-        public List<Bat> Bets { get; set; }
+        public List<Bat> Bats { get; set; }
         public Player Player { get; set; }
         public Wumpus Wumpus { get; set; }
 
@@ -54,7 +54,7 @@ namespace Wumpus
 
             Wumpuses = placer.PlaceWumpuses(QuantityWumpus, random, MapSquare, WorldSize);
 
-            Bets = placer.PlaceBats(QuantityBats, random, MapSquare, WorldSize);
+            Bats = placer.PlaceBats(QuantityBats, random, MapSquare, WorldSize);
 
             Player = placer.PlacePlayer(random, MapSquare, WorldSize);
 
@@ -98,7 +98,7 @@ namespace Wumpus
             }
         }
 
-        public void CheckForBetsSound()
+        public void CheckForBatsSound()
         {
             // Проверка на наличие скрежита крыльев в соседней  комнате.
             betSound = IsCloseToBat(Player.X, Player.Y);
@@ -141,11 +141,11 @@ namespace Wumpus
             return IsValid(x, y) && MapSquare[x][y] == 'P';
         }
 
-        public void SetQuantityWupuses()
+        public void SetQuantityWumpuses()
         {
             Console.Write("Enter your quantity Wumpuses: ");
-            int quantityWupus = Int32.Parse(Console.ReadLine());
-            QuantityWumpus = quantityWupus;
+            int quantityWumpuses = Int32.Parse(Console.ReadLine());
+            QuantityWumpus = quantityWumpuses;
         }
 
         public void SetQuantityPits()
@@ -235,7 +235,7 @@ namespace Wumpus
             PrintWorld();
             CheckForWumpusSmell(); // Проверка запаха Wumpus после перемещения игрока.
             CheckForPitWind();    // Проверка ветра (яма) после перемещения игрока.
-            CheckForBetsSound();
+            CheckForBatsSound();
         }
 
         public void ShootArrow(int directionX, int directionY)

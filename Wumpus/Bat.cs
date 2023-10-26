@@ -8,6 +8,7 @@ namespace Wumpus
 {
     public class Bat : MapObject
     {
+        public const char symbol = 'B';
         public Bat(int X, int Y)
         {
             X = X;

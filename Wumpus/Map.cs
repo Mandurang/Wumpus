@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Wumpus
 {
-    public class Player : MapObject
+    internal class Map
     {
-        public const char symbol = '@';
-        public int QuantityArrow { get; set; } = 4;
     }
 }

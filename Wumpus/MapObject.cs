@@ -9,6 +9,6 @@ namespace Wumpus
     public class MapObject
     {
         public int X { get; set; }
-        public int Y { get; set; }
+        public int Y { get; set; }        
     }
 }

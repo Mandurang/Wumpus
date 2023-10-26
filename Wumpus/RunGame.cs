@@ -12,9 +12,9 @@ namespace Wumpus
         {
             WumpusWorldGame wumpusWorld = new WumpusWorldGame();
             Console.WriteLine("Welcome to Wumpus World!");
-            Console.WriteLine("Legend: ? - Unexplored, _ - Empty, P - Player, P - Pit, W - Wumpus, B - Bets, G - Gold");
+            Console.WriteLine("Legend: ? - Unexplored, _ - Explored, P - Player, P - Pit, W - Wumpus, B - Bats, T - Treasure");
             wumpusWorld.SetWorldSize();
-            wumpusWorld.SetQuantityWupuses();
+            wumpusWorld.SetQuantityWumpuses();
             wumpusWorld.SetQuantityPits();
             wumpusWorld.SetQuantityTreasures();
             wumpusWorld.SetQuantityBats();
@@ -22,7 +22,7 @@ namespace Wumpus
             wumpusWorld.PrintWorld();
             wumpusWorld.CheckForWumpusSmell(); // Проверка запаха Wumpus при старте игры.
             wumpusWorld.CheckForPitWind();    // Проверка драфта (яма) при старте игры.
-            wumpusWorld.CheckForBetsSound();
+            wumpusWorld.CheckForBatsSound();
 
             while (true)
             {

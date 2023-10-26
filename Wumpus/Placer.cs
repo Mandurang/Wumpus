@@ -22,12 +22,12 @@ namespace Wumpus
 
         public List<Wumpus> PlaceWumpuses(int quantityWumpuses, Random random, char[][] mapSquare, int worldSize)
         {
-            return PlaceMapObject<Wumpus>(quantityWumpuses, random, mapSquare, worldSize, 'W');
+            return PlaceMapObject<Wumpus>(quantityWumpuses, random, mapSquare, worldSize, Wumpus.symbol);
         }
 
         public List<Pit> PlacePits(int quantityPits, Random random, char[][] mapSquare, int worldSize)
         {
-            return PlaceMapObject<Pit>(quantityPits, random, mapSquare, worldSize, 'P');
+            return PlaceMapObject<Pit>(quantityPits, random, mapSquare, worldSize, Pit.symbol);
         }
 
         public List<Treasure> PlaceTreasures(int quantityTreasures, Random random, char[][] mapSquare, int worldSize)

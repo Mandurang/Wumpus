@@ -9,6 +9,7 @@ namespace Wumpus
 {
     public class Pit : MapObject
     {
+        public const char symbol = 'P';
         public Pit(int X, int Y)
         {
             this.X = X;

@@ -9,6 +9,7 @@ namespace Wumpus
 {
     public class Treasure : MapObject
     {
+        public const char symbol = 'T';
         public Treasure(int X, int Y)
         {
             this.X = X;
