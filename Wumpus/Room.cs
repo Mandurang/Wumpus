@@ -17,9 +17,12 @@ namespace Wumpus
             Content = content;
         }
 
-
-
-        public char IsVisited(bool isVisited) => !isVisited ? '?' : Content;
+        public char IsVisited() 
+        {
+            if (Visited)
+                return '?';
+            return Content;
+        }
         
         public bool IsEmpty()
         {

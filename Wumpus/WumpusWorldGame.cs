@@ -9,6 +9,7 @@ namespace Wumpus
 {
     public class WumpusWorldGame
     {
+        public Map Map { get; }
         public int QuantityPits { get; set; }
         public int QuantityTreasure { get; set; }
         public int QuantityWumpus { get; set; }
@@ -29,45 +30,56 @@ namespace Wumpus
 
         private Placer placer = new Placer();
 
-        public void GenerateWorld()
+        private List<ICommand> commandHistory = new List<ICommand>();
+
+        public WumpusWorldGame()
         {
-            // Инициализация мира с заданным размером.
-            MapSquare = new char[WorldSize][];
-            Visited = new bool[WorldSize][];
-            for (int i = 0; i < WorldSize; i++)
-            {
-                MapSquare[i] = new char[WorldSize];
-                Visited[i] = new bool[WorldSize];
-                for (int j = 0; j < WorldSize; j++)
-                {
-                    MapSquare[i][j] = '_';
-                    Visited[i][j] = false;
-                }
-            }
-
-            Treasures = placer.PlaceTreasures(QuantityTreasure, random, MapSquare, WorldSize);
-
-            Pits = placer.PlacePits(QuantityPits, random, MapSquare, WorldSize);
-
-            Wumpuses = placer.PlaceWumpuses(QuantityWumpus, random, MapSquare, WorldSize);
-
-            Bats = placer.PlaceBats(QuantityBats, random, MapSquare, WorldSize);
-
-            Player = placer.PlacePlayer(random, MapSquare, WorldSize);
+            Map = new Map();
+            Player = new Player(0, 0);
         }
 
-        private bool IsValid(int x, int y)
+        public void GenerateWorld()
         {
-            return x >= 0 && x < WorldSize && y >= 0 && y < WorldSize;
+            
+            Treasures = placer.PlaceTreasures(QuantityTreasure, random, Map.MapSquare);
+
+            Pits = placer.PlacePits(QuantityPits, random, Map.MapSquare);
+
+            Wumpuses = placer.PlaceWumpuses(QuantityWumpus, random, Map.MapSquare);
+
+            Bats = placer.PlaceBats(QuantityBats, random, Map.MapSquare);
+
+            Player = placer.PlacePlayer(random, Map.MapSquare);
+        }
+
+        public void PrintWorld()
+        {
+            Console.Clear();
+
+            for (int i = 0; i < Map.MapSquare.GetLength(0); i++)
+            {
+                for (int j = 0; j < Map.MapSquare.GetLength(1); j++)
+                {
+                    if (i == Player.X && j == Player.Y)
+                        Console.Write("@ ");
+                    Console.Write(Map.MapSquare[i, j].IsVisited() + " ");
+                }
+                Console.WriteLine();
+            }
+        }
+
+        public bool IsValid(int x, int y)
+        {
+            return x >= 0 && x <  Map.MapSquare.GetLength(0) && y >= 0 && y < Map.MapSquare.GetLength(1);
         }
 
         private bool IsValidMapForWumpus(int x, int y)
         {
             if (IsValid(x, y))
             {
-                if (MapSquare[x][y] == '_')
+                if (Map.MapSquare[x,y].Content == '_')
                 {
-                    return x >= 0 && x < WorldSize && y >= 0 && y < WorldSize;
+                    return x >= 0 && x < Map.MapSquare.GetLength(0) && y >= 0 && y < Map.MapSquare.GetLength(1);
                 }
             }
             
@@ -124,17 +136,27 @@ namespace Wumpus
 
         private bool IsWumpus(int x, int y)
         {
-            return IsValid(x, y) && MapSquare[x][y] == 'W';
+            return IsValid(x, y) && Map.MapSquare[x, y].Content == 'W';
         }
 
         private bool IsBat(int x, int y)
         {
-            return IsValid(x, y) && MapSquare[x][y] == 'B';
+            return IsValid(x, y) && Map.MapSquare[x, y].Content == 'B';
         }
 
         private bool IsPit(int x, int y)
         {
-            return IsValid(x, y) && MapSquare[x][y] == 'P';
+            return IsValid(x, y) && Map.MapSquare[x, y].Content == 'P';
+        }
+
+        public void ExecuteCommand(ICommand command)
+        {
+            command.Execute();
+            commandHistory.Add(command);
+            PrintWorld();
+            CheckForWumpusSmell();
+            CheckForPitWind();
+            CheckForBatsSound();
         }
 
         public void SetQuantityWumpuses()
@@ -165,142 +187,15 @@ namespace Wumpus
             QuantityBats = quantityBats;
         }
 
-        public void SetWorldSize()
-        {
-            Console.Write("Enter your size world: ");
-            int size = Int32.Parse(Console.ReadLine());
-            WorldSize = size;
-        }
 
-        public void PrintWorld()
-        {
-            Console.Clear();
 
-            for (int i = 0; i < WorldSize; i++)
-            {
-                for (int j = 0; j < WorldSize; j++)
-                {
-                    if (i == Player.X && j == Player.Y)
-                        Console.Write("@ ");
-                    else if (Visited[i][j])
-                        Console.Write(MapSquare[i][j] + " ");
-                    else
-                        Console.Write("? ");
-                }
-                Console.WriteLine();
-            }
-        }
 
-        public void MovePlayer(int newX, int newY)
-        {
-            if (!IsValid(newX, newY))
-            {
-                Console.WriteLine("Invalid move.");
-                return;
-            }
 
-            Visited[Player.X][Player.Y] = true;
-            Player.X = newX;
-            Player.Y = newY;
-
-            if (MapSquare[Player.X][Player.Y] == 'P')
-            {
-                Console.WriteLine("Game over! You fell into a pit.");
-                Environment.Exit(0);
-            }
-
-            if (MapSquare[Player.X][Player.Y] == 'W')
-            {
-                Console.WriteLine("Game over! Encountered the Wumpus.");
-                Environment.Exit(0);
-            }
-
-            if (MapSquare[Player.X][Player.Y] == 'B')
-            {
-                Console.WriteLine("Go to! Encountered the Bet.");
-                Player.X = random.Next(WorldSize);
-                Player.Y = random.Next(WorldSize);
-            }
-
-            else if (MapSquare[Player.X][Player.Y] == 'G')
-            {
-                Console.WriteLine("Congratulations! You found the treasure and won the game.");
-                Environment.Exit(0);
-            }
-
-            PrintWorld();
-            CheckForWumpusSmell(); // Проверка запаха Wumpus после перемещения игрока.
-            CheckForPitWind();    // Проверка ветра (яма) после перемещения игрока.
-            CheckForBatsSound();
-        }
-
-        public void ShootArrow(int directionX, int directionY)
-        {
-            if (Player.QuantityArrow > 0)
-            {
-                Player.QuantityArrow--;
-                Console.WriteLine(" - Direction. You shoot an arrow!");
-
-                int x = Player.X;
-                int y = Player.Y;
-
-                for (int i = 0; i < 1; i++)
-                {
-                    x += directionX;
-                    y += directionY;
-
-                    if (IsValid(x, y) && MapSquare[x][y] == 'W')
-                    {
-                        Console.WriteLine("Congratulations! You shot the Wumpus and won the game.");
-                        Environment.Exit(0);
-                    }
-                }
-
-                Console.WriteLine("You missed. The Wumpus is still alive.");
-            }
-            else
-            {
-                Console.WriteLine("Out of arrows!");
-            }
-        }
-
-        public void RandomMoveWumpus()
-        {
-            foreach (var wumpus in Wumpuses)
-            {
-                int newX = wumpus.X;
-                int newY = wumpus.Y;
-                int chanceMoveWumpus = random.Next(1, 5);
-
-                if (chanceMoveWumpus != 1)
-                {
-                    do
-                    {
-                        newX = wumpus.X;
-                        newY = wumpus.Y;
-                        int randomMove = random.Next(1, 5);
-                        switch (randomMove)
-                        {
-                            case 1:
-                                newX = wumpus.X - 1;
-                                break;
-                            case 2:
-                                newY = wumpus.Y - 1;
-                                break;
-                            case 3:
-                                newX = wumpus.X + 1;
-                                break;
-                            case 4:
-                                newY = wumpus.Y + 1;
-                                break;
-                        }
-                    } while (!IsValidMapForWumpus(newX, newY));
-                    MapSquare[wumpus.X][wumpus.Y] = '_';
-                    wumpus.X = newX;
-                    wumpus.Y = newY;
-                    MapSquare[wumpus.X][wumpus.Y] = 'W';
-                }
-            }
-        }
+        //public void SetWorldSize()
+        //{
+        //    Console.Write("Enter your size world: ");
+        //    int size = Int32.Parse(Console.ReadLine());
+        //    WorldSize = size;
+        //}
     }
 }

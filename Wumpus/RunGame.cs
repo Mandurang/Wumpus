@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,7 +14,6 @@ namespace Wumpus
             WumpusWorldGame wumpusWorld = new WumpusWorldGame();
             Console.WriteLine("Welcome to Wumpus World!");
             Console.WriteLine("Legend: ? - Unexplored, _ - Explored, P - Player, P - Pit, W - Wumpus, B - Bats, T - Treasure");
-            wumpusWorld.SetWorldSize();
             wumpusWorld.SetQuantityWumpuses();
             wumpusWorld.SetQuantityPits();
             wumpusWorld.SetQuantityTreasures();
@@ -55,8 +55,8 @@ namespace Wumpus
                             Console.WriteLine("Invalid direction. Use W/A/S/D to shoot.");
                             continue;
                     }
-
-                    wumpusWorld.ShootArrow(directionX, directionY);
+                    ICommand shootCommand = new ShootCommand(wumpusWorld.Player, wumpusWorld, directionX, directionY);
+                    wumpusWorld.ExecuteCommand(shootCommand);
                     continue;
                 }
 
