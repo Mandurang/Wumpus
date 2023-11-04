@@ -9,9 +9,6 @@ namespace Wumpus
 {
     public class WumpusWorldGame
     {
-        public int WorldSize { get; set; }// Размер мира. Можете изменить на нужное значение.
-        public char[][] MapSquare { get; set; }
-        public bool[][] Visited { get; set; }
         public int QuantityPits { get; set; }
         public int QuantityTreasure { get; set; }
         public int QuantityWumpus { get; set; }
@@ -57,7 +54,6 @@ namespace Wumpus
             Bats = placer.PlaceBats(QuantityBats, random, MapSquare, WorldSize);
 
             Player = placer.PlacePlayer(random, MapSquare, WorldSize);
-
         }
 
         private bool IsValid(int x, int y)
@@ -110,7 +106,7 @@ namespace Wumpus
 
         private bool IsCloseToBat(int x, int y)
         {
-            // Проверка на соседство с Wumpus.
+            // Проверка на соседство с Мышами.
             return IsBat(x - 1, y) || IsBat(x + 1, y) || IsBat(x, y - 1) || IsBat(x, y + 1);
         }
 
