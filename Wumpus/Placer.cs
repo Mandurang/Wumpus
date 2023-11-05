@@ -17,14 +17,29 @@ namespace Wumpus
                 X = random.Next(worldSize);
                 Y = random.Next(worldSize);
             } while (mapSquare[X,Y].Content != '_');
-            Player player = new Player ( X, Y);
+            Player player = new Player (X, Y);
             return player;
         }
 
-        public List<Wumpus> PlaceWumpuses(int quantityWumpuses, Random random, Room[,] mapSquare)
+        public Wumpus PlaceWumpus(Random random, Room[,] mapSquare)
         {
-            return PlaceMapObject<Wumpus>(quantityWumpuses, random, mapSquare,  Wumpus.symbol);
+            int worldSize = mapSquare.GetLength(0);
+            int X, Y;
+            do
+            {
+                X = random.Next(worldSize);
+                Y = random.Next(worldSize);
+            } while (mapSquare[X, Y].Content != '_');
+            Wumpus wumpus = new Wumpus(X, Y);
+            return wumpus;
         }
+
+
+
+        //public List<Wumpus> PlaceWumpuses(int quantityWumpuses, Random random, Room[,] mapSquare)
+        //{
+        //    return PlaceMapObject<Wumpus>(quantityWumpuses, random, mapSquare,  Wumpus.symbol);
+        //}
 
         public List<Pit> PlacePits(int quantityPits, Random random, Room[,] mapSquare)
         {

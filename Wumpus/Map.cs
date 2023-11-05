@@ -39,19 +39,16 @@ namespace Wumpus
 
         public Room GetTile(int x, int y)
         {
-            if (x >= 0 && x < MapSquare.GetLength(0) && y >= 0 && y < MapSquare.GetLength(1))
+            if (IsValid(x, y))
             {
                 return MapSquare[x, y];
             }
-            throw  new ArgumentOutOfRangeException("Index X or Y out of range");
+            return null;
         }
 
         public bool IsValid(int x, int y)
         {
             return x >= 0 && x < MapSquare.GetLength(0) && y >= 0 && y < MapSquare.GetLength(1);
         }
-
-       
-
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -14,7 +15,7 @@ namespace Wumpus
             WumpusWorldGame wumpusWorld = new WumpusWorldGame();
             Console.WriteLine("Welcome to Wumpus World!");
             Console.WriteLine("Legend: ? - Unexplored, _ - Explored, P - Player, P - Pit, W - Wumpus, B - Bats, T - Treasure");
-            wumpusWorld.SetQuantityWumpuses();
+            //wumpusWorld.SetQuantityWumpuses();
             wumpusWorld.SetQuantityPits();
             wumpusWorld.SetQuantityTreasures();
             wumpusWorld.SetQuantityBats();
@@ -22,7 +23,7 @@ namespace Wumpus
             wumpusWorld.PrintWorld();
             wumpusWorld.CheckForWumpusSmell(); // Проверка запаха Wumpus при старте игры.
             wumpusWorld.CheckForPitWind();    // Проверка драфта (яма) при старте игры.
-            wumpusWorld.CheckForBatsSound();
+            wumpusWorld.CheckForBatsSound(); // Проверка запаха Wumpus после перемещения игрока.
 
             while (true)
             {
@@ -55,7 +56,7 @@ namespace Wumpus
                             Console.WriteLine("Invalid direction. Use W/A/S/D to shoot.");
                             continue;
                     }
-                    ICommand shootCommand = new ShootCommand(wumpusWorld.Player, wumpusWorld, directionX, directionY);
+                    ICommand shootCommand = new ShootCommand(wumpusWorld.Player, wumpusWorld.Map, directionX, directionY);
                     wumpusWorld.ExecuteCommand(shootCommand);
                     continue;
                 }
@@ -81,8 +82,9 @@ namespace Wumpus
                         Console.WriteLine("Invalid move. Use W/A/S/D to move.");
                         continue;
                 }
-                wumpusWorld.RandomMoveWumpus();
-                wumpusWorld.MovePlayer(newX, newY);
+                ICommand movePlayer = new MoveCommand(wumpusWorld.Player, newX, newY, wumpusWorld.Map);
+                wumpusWorld.ExecuteCommand(movePlayer);
+                continue;
             }
         }
     }

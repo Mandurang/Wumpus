@@ -12,17 +12,16 @@ namespace Wumpus
         public Map Map { get; }
         public int QuantityPits { get; set; }
         public int QuantityTreasure { get; set; }
-        public int QuantityWumpus { get; set; }
+        //public int QuantityWumpus { get; set; }
         public int QuantityBats { get; set; }
         public List<Treasure> Treasures { get; set; }
         public List<Pit> Pits { get; set; }
-        public List<Wumpus> Wumpuses { get; set; }
+        //public List<Wumpus> Wumpuses { get; set; }
         public List<Bat> Bats { get; set; }
         public Player Player { get; set; }
         public Wumpus Wumpus { get; set; }
 
         private bool wumpusSmell = false; // Флаг для запаха Wumpus.
-
         private bool pitWind = false;     // Флаг для драфта (яма).
         private bool betSound = false;     // Флаг для скрежита крильев (bet).
 
@@ -40,12 +39,11 @@ namespace Wumpus
 
         public void GenerateWorld()
         {
-            
             Treasures = placer.PlaceTreasures(QuantityTreasure, random, Map.MapSquare);
 
             Pits = placer.PlacePits(QuantityPits, random, Map.MapSquare);
 
-            Wumpuses = placer.PlaceWumpuses(QuantityWumpus, random, Map.MapSquare);
+            Wumpus = placer.PlaceWumpus(random, Map.MapSquare);
 
             Bats = placer.PlaceBats(QuantityBats, random, Map.MapSquare);
 
@@ -70,20 +68,7 @@ namespace Wumpus
 
         public bool IsValid(int x, int y)
         {
-            return x >= 0 && x <  Map.MapSquare.GetLength(0) && y >= 0 && y < Map.MapSquare.GetLength(1);
-        }
-
-        private bool IsValidMapForWumpus(int x, int y)
-        {
-            if (IsValid(x, y))
-            {
-                if (Map.MapSquare[x,y].Content == '_')
-                {
-                    return x >= 0 && x < Map.MapSquare.GetLength(0) && y >= 0 && y < Map.MapSquare.GetLength(1);
-                }
-            }
-            
-            return false;
+            return x >= 0 && x < Map.MapSquare.GetLength(0) && y >= 0 && y < Map.MapSquare.GetLength(1);
         }
 
         public void CheckForWumpusSmell()
@@ -157,13 +142,7 @@ namespace Wumpus
             CheckForWumpusSmell();
             CheckForPitWind();
             CheckForBatsSound();
-        }
-
-        public void SetQuantityWumpuses()
-        {
-            Console.Write("Enter your quantity Wumpuses: ");
-            int quantityWumpuses = Int32.Parse(Console.ReadLine());
-            QuantityWumpus = quantityWumpuses;
+            Wumpus.RandomMoveWumpus(Map);
         }
 
         public void SetQuantityPits()
@@ -187,9 +166,12 @@ namespace Wumpus
             QuantityBats = quantityBats;
         }
 
-
-
-
+        //public void SetQuantityWumpuses()
+        //{
+        //    Console.Write("Enter your quantity Wumpuses: ");
+        //    int quantityWumpuses = Int32.Parse(Console.ReadLine());
+        //    QuantityWumpus = quantityWumpuses;
+        //}
 
         //public void SetWorldSize()
         //{
