@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace Wumpus
+namespace WumpusWorld.MapObject
 {
     public class Pit : MapObject
     {

@@ -1,5 +1,6 @@
-﻿using Wumpus;
-using System.Drawing;
+﻿using System.Drawing;
+using WumpusWorld;
+
 class Program
 {
     static void Main(string[] args)

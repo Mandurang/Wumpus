@@ -4,19 +4,19 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WumpusWorld.Command;
+using WumpusWorld.MapObject;
 
-namespace Wumpus
+namespace WumpusWorld
 {
     public class WumpusWorldGame
     {
         public Map Map { get; }
         public int QuantityPits { get; set; }
         public int QuantityTreasure { get; set; }
-        //public int QuantityWumpus { get; set; }
         public int QuantityBats { get; set; }
         public List<Treasure> Treasures { get; set; }
         public List<Pit> Pits { get; set; }
-        //public List<Wumpus> Wumpuses { get; set; }
         public List<Bat> Bats { get; set; }
         public Player Player { get; set; }
         public Wumpus Wumpus { get; set; }
@@ -34,18 +34,18 @@ namespace Wumpus
         public WumpusWorldGame()
         {
             Map = new Map();
-            Player = new Player(0, 0);
+            Player = new Player();
         }
 
         public void GenerateWorld()
         {
-            Treasures = placer.PlaceTreasures(QuantityTreasure, random, Map.MapSquare);
-
             Pits = placer.PlacePits(QuantityPits, random, Map.MapSquare);
 
-            Wumpus = placer.PlaceWumpus(random, Map.MapSquare);
+            Treasures = placer.PlaceTreasures(QuantityTreasure, random, Map.MapSquare);
 
             Bats = placer.PlaceBats(QuantityBats, random, Map.MapSquare);
+
+            Wumpus = placer.PlaceWumpus(random, Map.MapSquare);
 
             Player = placer.PlacePlayer(random, Map.MapSquare);
         }
@@ -54,17 +54,32 @@ namespace Wumpus
         {
             Console.Clear();
 
-            for (int i = 0; i < Map.MapSquare.GetLength(0); i++)
+            int mapSize = Map.MapSquare.GetLength(0);
+
+            for (int i = 0; i < mapSize; i++)
             {
-                for (int j = 0; j < Map.MapSquare.GetLength(1); j++)
+                for (int j = 0; j < mapSize; j++)
                 {
+                    Room currentRoom = Map.MapSquare[i, j];
+
                     if (i == Player.X && j == Player.Y)
+                    {
                         Console.Write("@ ");
-                    Console.Write(Map.MapSquare[i, j].IsVisited() + " ");
+                        currentRoom.Visited = true; // Mark the current room as visited
+                    }
+                    else if (currentRoom.Visited)
+                    {
+                        Console.Write(currentRoom.Content + " ");
+                    }
+                    else
+                    {
+                        Console.Write(currentRoom.Content + " ");//Console.Write("? ");
+                    }
                 }
                 Console.WriteLine();
             }
         }
+
 
         public bool IsValid(int x, int y)
         {
@@ -165,6 +180,9 @@ namespace Wumpus
             int quantityBats = Int32.Parse(Console.ReadLine());
             QuantityBats = quantityBats;
         }
+
+        //public List<Wumpus> Wumpuses { get; set; }
+        //public int QuantityWumpus { get; set; }
 
         //public void SetQuantityWumpuses()
         //{

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WumpusWorld.MapObject;
 
-namespace Wumpus
+namespace WumpusWorld.Command
 {
     public class ShootCommand : ICommand
     {
@@ -35,9 +36,9 @@ namespace Wumpus
 
                 for (int i = 0; i < 1; i++)
                 {
-                    while (map.GetTile(targetX, targetY).Content != '_')
+                    while (map.GetRoom(targetX, targetY).Content != '_')
                     {
-                        if (map.GetTile(targetX, targetY).Content == 'W')
+                        if (map.GetRoom(targetX, targetY).Content == 'W')
                         {
                             Console.WriteLine("Congratulations! You shot the Wumpus and won the game.");
                             Environment.Exit(0);

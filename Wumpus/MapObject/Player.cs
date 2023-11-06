@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Wumpus
+namespace WumpusWorld.MapObject
 {
     public class Player : MapObject
     {
@@ -13,9 +13,14 @@ namespace Wumpus
 
         public Random random = new Random();
 
+        public Player()
+        {
+
+        }
+
         public Player(int x, int y)
         {
-            X = x; 
+            X = x;
             Y = y;
         }
     }

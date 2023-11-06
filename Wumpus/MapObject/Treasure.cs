@@ -1,11 +1,10 @@
-﻿using Wumpus;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Wumpus
+namespace WumpusWorld.MapObject
 {
     public class Treasure : MapObject
     {

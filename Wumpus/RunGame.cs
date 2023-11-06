@@ -5,16 +5,17 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using WumpusWorld.Command;
 
-namespace Wumpus
+namespace WumpusWorld
 {
     public class RunGame
     {
         public void Run()
         {
-            WumpusWorldGame wumpusWorld = new WumpusWorldGame();
             Console.WriteLine("Welcome to Wumpus World!");
             Console.WriteLine("Legend: ? - Unexplored, _ - Explored, P - Player, P - Pit, W - Wumpus, B - Bats, T - Treasure");
+            WumpusWorldGame wumpusWorld = new WumpusWorldGame();
             //wumpusWorld.SetQuantityWumpuses();
             wumpusWorld.SetQuantityPits();
             wumpusWorld.SetQuantityTreasures();
@@ -25,7 +26,7 @@ namespace Wumpus
             wumpusWorld.CheckForPitWind();    // Проверка драфта (яма) при старте игры.
             wumpusWorld.CheckForBatsSound(); // Проверка запаха Wumpus после перемещения игрока.
 
-            while (true)
+            do
             {
                 Console.Write("Enter your move (W/A/S/D) or 'F' to shoot: ");
                 char move = Console.ReadKey().KeyChar;
@@ -58,34 +59,42 @@ namespace Wumpus
                     }
                     ICommand shootCommand = new ShootCommand(wumpusWorld.Player, wumpusWorld.Map, directionX, directionY);
                     wumpusWorld.ExecuteCommand(shootCommand);
-                    continue;
                 }
-
-                int newX = wumpusWorld.Player.X;
-                int newY = wumpusWorld.Player.Y;
-
-                switch (move)
+                else
                 {
-                    case 'W':
-                        newX--;
-                        break;
-                    case 'A':
-                        newY--;
-                        break;
-                    case 'S':
-                        newX++;
-                        break;
-                    case 'D' :
-                        newY++;
-                        break;
-                    default:
-                        Console.WriteLine("Invalid move. Use W/A/S/D to move.");
+                    int newX = wumpusWorld.Player.X;
+                    int newY = wumpusWorld.Player.Y;
+
+                    switch (move)
+                    {
+                        case 'W':
+                            newX--;
+                            break;
+                        case 'A':
+                            newY--;
+                            break;
+                        case 'S':
+                            newX++;
+                            break;
+                        case 'D':
+                            newY++;
+                            break;
+                        default:
+                            Console.WriteLine("Invalid move. Use W/A/S/D to move.");
+                            continue;
+                    }
+
+                    if (!wumpusWorld.IsValid(newX, newY))
+                    {
+                        Console.WriteLine("Invalid move. You can't go outside the map.");
                         continue;
+                    }
+
+                    ICommand movePlayer = new MoveCommand(wumpusWorld.Player, newX, newY, wumpusWorld.Map);
+                    wumpusWorld.ExecuteCommand(movePlayer);
                 }
-                ICommand movePlayer = new MoveCommand(wumpusWorld.Player, newX, newY, wumpusWorld.Map);
-                wumpusWorld.ExecuteCommand(movePlayer);
-                continue;
-            }
+            } while (true); 
+
         }
     }
 }

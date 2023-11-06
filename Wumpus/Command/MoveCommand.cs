@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WumpusWorld.MapObject;
 
-namespace Wumpus
+namespace WumpusWorld.Command
 {
     public class MoveCommand : ICommand
     {
@@ -19,6 +20,7 @@ namespace Wumpus
             this.newX = newX;
             this.newY = newY;
             this.map = map;
+            this.random = new Random();
         }
 
         public void Execute()
@@ -29,12 +31,6 @@ namespace Wumpus
         private void MovePlayer(int newX, int newY)
         {
             player.X = newX; player.Y = newY;
-            
-            if (!map.IsValid(newX, newY))
-            {
-                Console.WriteLine("Invalid move.");
-                return;
-            }
 
             if (map.MapSquare[player.X, player.Y].Content == 'P')
             {
@@ -50,12 +46,40 @@ namespace Wumpus
 
             if (map.MapSquare[player.X, player.Y].Content == 'B')
             {
-                Console.WriteLine("Go to! Encountered the Bet.");
-                player.X = random.Next(map.MapSquare.GetLength(0));
-                player.Y = random.Next(map.MapSquare.GetLength(1));
+                Console.WriteLine("Encountered the Bat! You've been carried to a new location.");
+
+                int mapSize = map.MapSquare.GetLength(0);
+
+                do
+                {
+                    newX = random.Next(mapSize);
+                    newY = random.Next(mapSize);
+                }
+                while (newX == player.X && newY == player.Y);
+
+                player.X = newX;
+                player.Y = newY;
+
+                if (map.MapSquare[player.X, player.Y].Content == 'P')
+                {
+                    Console.WriteLine("Game over! You fell into a pit.");
+                    Environment.Exit(0);
+                }
+
+                if (map.MapSquare[player.X, player.Y].Content == 'W')
+                {
+                    Console.WriteLine("Game over! Encountered the Wumpus.");
+                    Environment.Exit(0);
+                }
+
+                if (map.MapSquare[player.X, player.Y].Content == 'T')
+                {
+                    Console.WriteLine("Congratulations! You found the treasure and won the game.");
+                    Environment.Exit(0);
+                }
             }
 
-            else if (map.MapSquare[player.X, player.Y].Content == 'G')
+            if (map.MapSquare[player.X, player.Y].Content == 'T')
             {
                 Console.WriteLine("Congratulations! You found the treasure and won the game.");
                 Environment.Exit(0);
