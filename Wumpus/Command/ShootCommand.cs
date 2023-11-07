@@ -9,36 +9,38 @@ namespace WumpusWorld.Command
 {
     public class ShootCommand : ICommand
     {
-        private Player player;
-        private Map map;
+        private WumpusWorldGame wumpusWorldGame;
         private int directionX, directionY;
 
-        public ShootCommand(Player player, Map map, int directionX, int directionY)
+        public ShootCommand(WumpusWorldGame wumpusWorldGame, int directionX, int directionY)
         {
-            this.player = player;
-            this.map = map;
+            this.wumpusWorldGame = wumpusWorldGame;
             this.directionX = directionX;
             this.directionY = directionY;
         }
 
         public void Execute()
         {
-            ShootArrow(directionX, directionY, map);
+            ShootArrow(directionX, directionY, wumpusWorldGame);
         }
 
-        private void ShootArrow(int directionX, int directionY, Map map)
+        private void ShootArrow(int directionX, int directionY, WumpusWorldGame wumpusWorldGame)
         {
-            int targetX = player.X;
-            int targetY = player.Y;
-            if (player.QuantityArrow > 0)
+            int targetX = wumpusWorldGame.Player.X;
+            int targetY = wumpusWorldGame.Player.Y;
+
+            int wumpusX = wumpusWorldGame.Wumpus.X;
+            int wumpusY = wumpusWorldGame.Wumpus.Y;
+
+            if (wumpusWorldGame.Player.QuantityArrow > 0)
             {
-                player.QuantityArrow--;
+                wumpusWorldGame.Player.QuantityArrow--;
 
                 for (int i = 0; i < 1; i++)
                 {
-                    while (map.GetRoom(targetX, targetY).Content != '_')
+                    while (wumpusWorldGame.Map.GetRoom(targetX, targetY).Content != '_')
                     {
-                        if (map.GetRoom(targetX, targetY).Content == 'W')
+                        if (wumpusWorldGame.Map.GetRoom(targetX, targetY) == wumpusWorldGame.Map.GetRoom(wumpusX, wumpusY))
                         {
                             Console.WriteLine("Congratulations! You shot the Wumpus and won the game.");
                             Environment.Exit(0);

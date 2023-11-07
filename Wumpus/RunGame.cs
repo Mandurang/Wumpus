@@ -57,7 +57,7 @@ namespace WumpusWorld
                             Console.WriteLine("Invalid direction. Use W/A/S/D to shoot.");
                             continue;
                     }
-                    ICommand shootCommand = new ShootCommand(wumpusWorld.Player, wumpusWorld.Map, directionX, directionY);
+                    ICommand shootCommand = new ShootCommand(wumpusWorld, directionX, directionY);
                     wumpusWorld.ExecuteCommand(shootCommand);
                 }
                 else
@@ -90,7 +90,7 @@ namespace WumpusWorld
                         continue;
                     }
 
-                    ICommand movePlayer = new MoveCommand(wumpusWorld.Player, newX, newY, wumpusWorld.Map);
+                    ICommand movePlayer = new MoveCommand(wumpusWorld.Player, newX, newY, wumpusWorld.Map, wumpusWorld.Wumpus);
                     wumpusWorld.ExecuteCommand(movePlayer);
                 }
             } while (true); 

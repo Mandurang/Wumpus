@@ -13,14 +13,16 @@ namespace WumpusWorld.Command
         private int newX, newY;
         private Map map;
         private Random random;
+        private Wumpus wumpus;
 
-        public MoveCommand(Player player, int newX, int newY, Map map)
+        public MoveCommand(Player player, int newX, int newY, Map map, Wumpus wumpus)
         {
             this.player = player;
             this.newX = newX;
             this.newY = newY;
             this.map = map;
             this.random = new Random();
+            this.wumpus = wumpus;
         }
 
         public void Execute()
@@ -38,7 +40,7 @@ namespace WumpusWorld.Command
                 Environment.Exit(0);
             }
 
-            if (map.MapSquare[player.X, player.Y].Content == 'W')
+            if (map.MapSquare[player.X, player.Y] == map.MapSquare[wumpus.X, wumpus.Y])
             {
                 Console.WriteLine("Game over! Encountered the Wumpus.");
                 Environment.Exit(0);
@@ -60,23 +62,28 @@ namespace WumpusWorld.Command
                 player.X = newX;
                 player.Y = newY;
 
-                if (map.MapSquare[player.X, player.Y].Content == 'P')
-                {
-                    Console.WriteLine("Game over! You fell into a pit.");
-                    Environment.Exit(0);
-                }
+                GetProblemOnMove();
+            }
 
-                if (map.MapSquare[player.X, player.Y].Content == 'W')
-                {
-                    Console.WriteLine("Game over! Encountered the Wumpus.");
-                    Environment.Exit(0);
-                }
+            if (map.MapSquare[player.X, player.Y].Content == 'T')
+            {
+                Console.WriteLine("Congratulations! You found the treasure and won the game.");
+                Environment.Exit(0);
+            }
+        }
 
-                if (map.MapSquare[player.X, player.Y].Content == 'T')
-                {
-                    Console.WriteLine("Congratulations! You found the treasure and won the game.");
-                    Environment.Exit(0);
-                }
+        private void GetProblemOnMove()
+        {
+            if (map.MapSquare[player.X, player.Y].Content == 'P')
+            {
+                Console.WriteLine("Game over! You fell into a pit.");
+                Environment.Exit(0);
+            }
+
+            if (map.MapSquare[player.X, player.Y] == map.MapSquare[wumpus.X, wumpus.Y])
+            {
+                Console.WriteLine("Game over! Encountered the Wumpus.");
+                Environment.Exit(0);
             }
 
             if (map.MapSquare[player.X, player.Y].Content == 'T')

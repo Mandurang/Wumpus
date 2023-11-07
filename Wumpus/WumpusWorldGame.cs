@@ -67,6 +67,10 @@ namespace WumpusWorld
                         Console.Write("@ ");
                         currentRoom.Visited = true; // Mark the current room as visited
                     }
+                    else if (i == Wumpus.X && j == Wumpus.Y)
+                    {
+                        Console.Write("W ");
+                    }
                     else if (currentRoom.Visited)
                     {
                         Console.Write(currentRoom.Content + " ");
@@ -171,7 +175,7 @@ namespace WumpusWorld
         {
             Console.Write("Enter your quantity treasures: ");
             int quantityTreasure = Int32.Parse(Console.ReadLine());
-            QuantityPits = quantityTreasure;
+            QuantityTreasure = quantityTreasure;
         }
 
         public void SetQuantityBats()

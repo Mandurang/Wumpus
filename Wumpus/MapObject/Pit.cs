@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace WumpusWorld.MapObject
 {
     public class Pit : MapObject

@@ -45,11 +45,11 @@ namespace WumpusWorld.MapObject
                             newY = Y + 1;
                             break;
                     }
-                } while (!IsValidMapForWumpus(newX, newY, map));
-                map.MapSquare[X, Y].Content = '_';
+                } while (!IsValid(newX, newY, map));
+                //map.MapSquare[X, Y].Content = '_';
                 X = newX;
                 Y = newY;
-                map.MapSquare[X, Y].Content = 'W';
+                //map.MapSquare[X, Y].Content = 'W';
             }
         }
 
@@ -64,7 +64,7 @@ namespace WumpusWorld.MapObject
             {
                 if (map.MapSquare[x, y].Content == '_')
                 {
-                    return x >= 0 && x < map.MapSquare.GetLength(0) && y >= 0 && y < map.MapSquare.GetLength(1);
+                    return IsValid(x, y, map);
                 }
             }
 

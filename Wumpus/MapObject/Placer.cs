@@ -19,7 +19,7 @@ namespace WumpusWorld.MapObject
             } while (mapSquare[X, Y].Content != '_');
             
             Wumpus wumpus = new Wumpus(X, Y);
-            mapSquare[X, Y].Content = Wumpus.symbol;
+            //mapSquare[X, Y].Content = Wumpus.symbol;
             return wumpus;
         }
 
