@@ -91,7 +91,7 @@ namespace WumpusWorld
         public void CheckForWumpusSmell()
         {
             // Проверка на наличие запаха Wumpus в текущей комнате.
-            wumpusSmell = IsCloseToWumpus(Player.X, Player.Y);
+            wumpusSmell = IsCloseToWumpus(Player.X, Player.Y, Wumpus.X, Wumpus.Y);
             if (wumpusSmell)
             {
                 Console.WriteLine("I smell a Wumpus");
@@ -124,10 +124,13 @@ namespace WumpusWorld
             return IsBat(x - 1, y) || IsBat(x + 1, y) || IsBat(x, y - 1) || IsBat(x, y + 1);
         }
 
-        private bool IsCloseToWumpus(int x, int y)
+        private bool IsCloseToWumpus(int playerX, int playerY, int wumpusX, int wumpusY)
         {
             // Проверка на соседство с Wumpus.
-            return IsWumpus(x - 1, y) || IsWumpus(x + 1, y) || IsWumpus(x, y - 1) || IsWumpus(x, y + 1);
+            return IsWumpus(playerX, playerY, wumpusX - 1, wumpusY) ||
+                   IsWumpus(playerX, playerY, wumpusX + 1, wumpusY) ||
+                   IsWumpus(playerX, playerY, wumpusX, wumpusY - 1) ||
+                   IsWumpus(playerX, playerY, wumpusX, wumpusY + 1);
         }
 
         private bool IsCloseToPit(int x, int y)
@@ -137,9 +140,9 @@ namespace WumpusWorld
         }
 
 
-        private bool IsWumpus(int x, int y)
+        private bool IsWumpus(int playerX, int playerY, int wumpusX, int wumpusY)
         {
-            return validSerivice.IsValid(x, y, Map.Size) && Map.MapSquare[x, y].Content == 'W';
+            return validSerivice.IsValid(wumpusX, wumpusY, Map.Size) && playerX == wumpusX && playerY == wumpusY;
         }
 
         private bool IsBat(int x, int y)
