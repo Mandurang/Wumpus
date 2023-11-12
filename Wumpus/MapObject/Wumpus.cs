@@ -46,29 +46,14 @@ namespace WumpusWorld.MapObject
                             break;
                     }
                 } while (!IsValid(newX, newY, map));
-                //map.MapSquare[X, Y].Content = '_';
                 X = newX;
                 Y = newY;
-                //map.MapSquare[X, Y].Content = 'W';
             }
         }
 
-        public bool IsValid(int x, int y, Map map)
+        private bool IsValid(int x, int y, Map map)
         {
-            return x >= 0 && x < map.MapSquare.GetLength(0) && y >= 0 && y < map.MapSquare.GetLength(1);
-        }
-
-        private bool IsValidMapForWumpus(int x, int y, Map map)
-        {
-            if (IsValid(x, y, map))
-            {
-                if (map.MapSquare[x, y].Content == '_')
-                {
-                    return IsValid(x, y, map);
-                }
-            }
-
-            return false;
+            return x >= 0 && x < map.Size && y >= 0 && y < map.Size;
         }
     }
 }

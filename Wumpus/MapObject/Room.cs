@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WumpusWorld.MapObject
 {
-    public class Room
+    public class Room : MapObject
     {
         public char Content { get; set; }
 
@@ -16,5 +16,6 @@ namespace WumpusWorld.MapObject
         {
             Content = content;
         }
+        public Room() { }
     }
 }

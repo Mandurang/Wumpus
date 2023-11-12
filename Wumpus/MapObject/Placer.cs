@@ -19,7 +19,6 @@ namespace WumpusWorld.MapObject
             } while (mapSquare[X, Y].Content != '_');
             
             Wumpus wumpus = new Wumpus(X, Y);
-            //mapSquare[X, Y].Content = Wumpus.symbol;
             return wumpus;
         }
 
@@ -76,7 +75,3 @@ namespace WumpusWorld.MapObject
     }
 }
 
-//public List<Wumpus> PlaceWumpuses(int quantityWumpuses, Random random, Room[,] mapSquare)
-//{
-//    return PlaceMapObject<Wumpus>(quantityWumpuses, random, mapSquare,  Wumpus.symbol);
-//}

@@ -6,17 +6,19 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using WumpusWorld.Command;
+using static WumpusWorld.RunGame;
+using WumpusWorld.MapObject;
 
 namespace WumpusWorld
 {
-    public class RunGame
+    public class RunGame 
     {
+        private ValidService validSerivice = new ValidService();
         public void Run()
         {
             Console.WriteLine("Welcome to Wumpus World!");
             Console.WriteLine("Legend: ? - Unexplored, _ - Explored, P - Player, P - Pit, W - Wumpus, B - Bats, T - Treasure");
             WumpusWorldGame wumpusWorld = new WumpusWorldGame();
-            //wumpusWorld.SetQuantityWumpuses();
             wumpusWorld.SetQuantityPits();
             wumpusWorld.SetQuantityTreasures();
             wumpusWorld.SetQuantityBats();
@@ -36,55 +38,28 @@ namespace WumpusWorld
                 {
                     Console.Write("Enter the direction to shoot (W/A/S/D): ");
                     char shootDirection = Console.ReadKey().KeyChar;
-                    int directionX = 0;
-                    int directionY = 0;
+                    int directionX = wumpusWorld.Player.X;
+                    int directionY = wumpusWorld.Player.Y;
 
-                    switch (shootDirection)
-                    {
-                        case 'W':
-                            directionX = -1;
-                            break;
-                        case 'A':
-                            directionY = -1;
-                            break;
-                        case 'S':
-                            directionX = 1;
-                            break;
-                        case 'D':
-                            directionY = 1;
-                            break;
-                        default:
-                            Console.WriteLine("Invalid direction. Use W/A/S/D to shoot.");
-                            continue;
-                    }
+                    var directionRoom = ExecuteDirection(shootDirection, directionX, directionY);
+                    directionX = directionRoom.X;
+                    directionY = directionRoom.Y;
+                
                     ICommand shootCommand = new ShootCommand(wumpusWorld, directionX, directionY);
                     wumpusWorld.ExecuteCommand(shootCommand);
+                    
                 }
                 else
                 {
                     int newX = wumpusWorld.Player.X;
                     int newY = wumpusWorld.Player.Y;
 
-                    switch (move)
-                    {
-                        case 'W':
-                            newX--;
-                            break;
-                        case 'A':
-                            newY--;
-                            break;
-                        case 'S':
-                            newX++;
-                            break;
-                        case 'D':
-                            newY++;
-                            break;
-                        default:
-                            Console.WriteLine("Invalid move. Use W/A/S/D to move.");
-                            continue;
-                    }
+                    var directionRoom = ExecuteDirection(move, newX, newY);
 
-                    if (!wumpusWorld.IsValid(newX, newY))
+                    newX = directionRoom.X;
+                    newY = directionRoom.Y;
+
+                    if (!validSerivice.IsValid(newX, newY, wumpusWorld.Map.Size))
                     {
                         Console.WriteLine("Invalid move. You can't go outside the map.");
                         continue;
@@ -93,8 +68,51 @@ namespace WumpusWorld
                     ICommand movePlayer = new MoveCommand(wumpusWorld.Player, newX, newY, wumpusWorld.Map, wumpusWorld.Wumpus);
                     wumpusWorld.ExecuteCommand(movePlayer);
                 }
-            } while (true); 
+            } while (true);
+        }
 
+        private Room ExecuteDirection(char move, int directionX, int directionY)
+        {
+            Room room = new Room { X = directionX, Y = directionY };
+
+            bool validMove = true;
+
+            do
+            {
+                switch (move)
+                {
+                    case 'W':
+                        room.X--;
+                        validMove = true;
+                        break;
+                    case 'A':
+                        room.Y--;
+                        validMove = true;
+                        break;
+                    case 'S':
+                        room.X++;
+                        validMove = true;
+                        break;
+                    case 'D':
+                        room.Y++;
+                        validMove = true;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid move. Use W/A/S/D to move.");
+                        validMove = false;
+                        break;
+                }
+
+                if (!validMove)
+                {
+                    Console.Write("Enter a valid move: ");
+                    move = Console.ReadKey().KeyChar;
+                    Console.WriteLine(); // Переход на новую строку после ввода
+                }
+
+            } while (!validMove);
+
+            return room;
         }
     }
 }

@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using WumpusWorld.Command;
 using WumpusWorld.MapObject;
+using static WumpusWorld.RunGame;
 
 namespace WumpusWorld
 {
-    public class WumpusWorldGame
+    public class WumpusWorldGame : IWumpusEncountered
     {
         public Map Map { get; }
         public int QuantityPits { get; set; }
@@ -30,6 +31,9 @@ namespace WumpusWorld
         private Placer placer = new Placer();
 
         private List<ICommand> commandHistory = new List<ICommand>();
+
+        private UserInputService userInputService = new UserInputService();
+        private ValidService validSerivice = new ValidService();
 
         public WumpusWorldGame()
         {
@@ -84,12 +88,6 @@ namespace WumpusWorld
             }
         }
 
-
-        public bool IsValid(int x, int y)
-        {
-            return x >= 0 && x < Map.MapSquare.GetLength(0) && y >= 0 && y < Map.MapSquare.GetLength(1);
-        }
-
         public void CheckForWumpusSmell()
         {
             // Проверка на наличие запаха Wumpus в текущей комнате.
@@ -138,68 +136,56 @@ namespace WumpusWorld
             return IsPit(x - 1, y) || IsPit(x + 1, y) || IsPit(x, y - 1) || IsPit(x, y + 1);
         }
 
+
         private bool IsWumpus(int x, int y)
         {
-            return IsValid(x, y) && Map.MapSquare[x, y].Content == 'W';
+            return validSerivice.IsValid(x, y, Map.Size) && Map.MapSquare[x, y].Content == 'W';
         }
 
         private bool IsBat(int x, int y)
         {
-            return IsValid(x, y) && Map.MapSquare[x, y].Content == 'B';
+            return validSerivice.IsValid(x, y, Map.Size) && Map.MapSquare[x, y].Content == 'B';
         }
 
         private bool IsPit(int x, int y)
         {
-            return IsValid(x, y) && Map.MapSquare[x, y].Content == 'P';
+            return validSerivice.IsValid(x, y, Map.Size) && Map.MapSquare[x, y].Content == 'P';
         }
 
         public void ExecuteCommand(ICommand command)
         {
             command.Execute();
             commandHistory.Add(command);
+            Wumpus.RandomMoveWumpus(Map);
+            Encountered(Player.X, Player.Y, Wumpus.X, Wumpus.Y);
             PrintWorld();
             CheckForWumpusSmell();
             CheckForPitWind();
             CheckForBatsSound();
-            Wumpus.RandomMoveWumpus(Map);
         }
 
         public void SetQuantityPits()
         {
-            Console.Write("Enter your quantity pits: ");
-            int quantityPits = Int32.Parse(Console.ReadLine());
-            QuantityPits = quantityPits;
+            QuantityPits = userInputService.GetValidUserInput("Enter your quantity pits: "); 
         }
 
         public void SetQuantityTreasures()
         {
-            Console.Write("Enter your quantity treasures: ");
-            int quantityTreasure = Int32.Parse(Console.ReadLine());
-            QuantityTreasure = quantityTreasure;
+            QuantityTreasure = userInputService.GetValidUserInput("Enter your quantity treasures: "); 
         }
 
         public void SetQuantityBats()
         {
-            Console.Write("Enter your quantity bats: ");
-            int quantityBats = Int32.Parse(Console.ReadLine());
-            QuantityBats = quantityBats;
+            QuantityBats = userInputService.GetValidUserInput("Enter your quantity bats: "); 
         }
 
-        //public List<Wumpus> Wumpuses { get; set; }
-        //public int QuantityWumpus { get; set; }
-
-        //public void SetQuantityWumpuses()
-        //{
-        //    Console.Write("Enter your quantity Wumpuses: ");
-        //    int quantityWumpuses = Int32.Parse(Console.ReadLine());
-        //    QuantityWumpus = quantityWumpuses;
-        //}
-
-        //public void SetWorldSize()
-        //{
-        //    Console.Write("Enter your size world: ");
-        //    int size = Int32.Parse(Console.ReadLine());
-        //    WorldSize = size;
-        //}
+        public void Encountered(int directionX, int directionY, int wumpusX, int wumpusY)
+        {
+            if (directionX == wumpusX && directionY == wumpusY)
+            {
+                Console.WriteLine("Game over! Encountered the Wumpus.");
+                Environment.Exit(0);
+            }
+        }
     }
 }

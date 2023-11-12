@@ -34,19 +34,15 @@ namespace WumpusWorld.Command
         {
             player.X = newX; player.Y = newY;
 
-            if (map.MapSquare[player.X, player.Y].Content == 'P')
+            var content = map.MapSquare[player.X, player.Y].Content;
+
+            if (content == 'P')
             {
                 Console.WriteLine("Game over! You fell into a pit.");
                 Environment.Exit(0);
             }
 
-            if (map.MapSquare[player.X, player.Y] == map.MapSquare[wumpus.X, wumpus.Y])
-            {
-                Console.WriteLine("Game over! Encountered the Wumpus.");
-                Environment.Exit(0);
-            }
-
-            if (map.MapSquare[player.X, player.Y].Content == 'B')
+            if (content == 'B')
             {
                 Console.WriteLine("Encountered the Bat! You've been carried to a new location.");
 
@@ -65,7 +61,7 @@ namespace WumpusWorld.Command
                 GetProblemOnMove();
             }
 
-            if (map.MapSquare[player.X, player.Y].Content == 'T')
+            if (content == 'T')
             {
                 Console.WriteLine("Congratulations! You found the treasure and won the game.");
                 Environment.Exit(0);
@@ -74,19 +70,15 @@ namespace WumpusWorld.Command
 
         private void GetProblemOnMove()
         {
-            if (map.MapSquare[player.X, player.Y].Content == 'P')
+            var content = map.MapSquare[player.X, player.Y].Content;
+
+            if (content == 'P')
             {
                 Console.WriteLine("Game over! You fell into a pit.");
                 Environment.Exit(0);
             }
 
-            if (map.MapSquare[player.X, player.Y] == map.MapSquare[wumpus.X, wumpus.Y])
-            {
-                Console.WriteLine("Game over! Encountered the Wumpus.");
-                Environment.Exit(0);
-            }
-
-            if (map.MapSquare[player.X, player.Y].Content == 'T')
+            if (content == 'T')
             {
                 Console.WriteLine("Congratulations! You found the treasure and won the game.");
                 Environment.Exit(0);
@@ -94,3 +86,5 @@ namespace WumpusWorld.Command
         }
     }
 }
+            
+
