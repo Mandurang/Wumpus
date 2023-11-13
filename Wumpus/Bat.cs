@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace Wumpus
 {
-    public class Bat
+    public class Bat : MapObject
     {
-        public int Room { get; set; }
+        public const char symbol = 'B';
+        public Bat(int X, int Y)
+        {
+            X = X;
+            Y = Y;
+        }
+        public Bat() { }
     }
 }
