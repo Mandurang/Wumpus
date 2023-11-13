@@ -13,16 +13,14 @@ namespace WumpusWorld.Command
         private int newX, newY;
         private Map map;
         private Random random;
-        private Wumpus wumpus;
 
-        public MoveCommand(Player player, int newX, int newY, Map map, Wumpus wumpus)
+        public MoveCommand(Player player, int newX, int newY, Map map)
         {
             this.player = player;
             this.newX = newX;
             this.newY = newY;
             this.map = map;
             this.random = new Random();
-            this.wumpus = wumpus;
         }
 
         public void Execute()

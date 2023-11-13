@@ -147,12 +147,12 @@ namespace WumpusWorld
 
         private bool IsBat(int x, int y)
         {
-            return validSerivice.IsValid(x, y, Map.Size) && Map.MapSquare[x, y].Content == 'B';
+            return validSerivice.IsValid(x, y, Map.Size) && Map.MapSquare[x, y].Content == Bat.symbol;
         }
 
         private bool IsPit(int x, int y)
         {
-            return validSerivice.IsValid(x, y, Map.Size) && Map.MapSquare[x, y].Content == 'P';
+            return validSerivice.IsValid(x, y, Map.Size) && Map.MapSquare[x, y].Content == Pit.symbol;
         }
 
         public void ExecuteCommand(ICommand command)
