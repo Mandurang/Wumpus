@@ -7,38 +7,15 @@ using System.Threading.Tasks;
 
 namespace Wumpus
 {
-    public class Treasure
+    public class Treasure : MapObject
     {
-        public int TreasureX { get; set; }
-        public int TreasureY { get; set; }
-
-        public Treasure(int treasureX, int treasureY)
+        public const char symbol = 'T';
+        public Treasure(int X, int Y)
         {
-            TreasureX = treasureX;
-            TreasureY = treasureY;
+            this.X = X;
+            this.Y = Y;
         }
 
         public Treasure() { }
-
-        public List<Treasure> PlaceTreasure(int quantityTreasure, Random random, char[][] MapSquare, int worldSize)
-        {
-            List<Treasure> treasures = new List<Treasure>();
-
-            for (int i = 0; i < quantityTreasure; i++)
-            {
-                int treasureX, treasureY;
-
-                do
-                {
-                    treasureX = random.Next(worldSize);
-                    treasureY = random.Next(worldSize);
-                } while (MapSquare[treasureX][treasureY] != '_');
-                MapSquare[treasureX][treasureY] = 'G';
-
-                treasures.Add(new Treasure(treasureX, treasureY));
-
-            }
-            return treasures;
-        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,23 +13,55 @@ namespace Wumpus
         {
             WumpusWorldGame wumpusWorld = new WumpusWorldGame();
             Console.WriteLine("Welcome to Wumpus World!");
-            Console.WriteLine("Legend: ? - Unexplored, _ - Empty, @ - Player, P - Pit, W - Wumpus, G - Gold");
-            wumpusWorld.SetWorldSize();
+            Console.WriteLine("Legend: ? - Unexplored, _ - Explored, P - Player, P - Pit, W - Wumpus, B - Bats, T - Treasure");
+            wumpusWorld.SetQuantityWumpuses();
             wumpusWorld.SetQuantityPits();
-            wumpusWorld.SetQuantityTreasure();
+            wumpusWorld.SetQuantityTreasures();
+            wumpusWorld.SetQuantityBats();
             wumpusWorld.GenerateWorld(); // Генерация случайного мира.
             wumpusWorld.PrintWorld();
             wumpusWorld.CheckForWumpusSmell(); // Проверка запаха Wumpus при старте игры.
             wumpusWorld.CheckForPitWind();    // Проверка драфта (яма) при старте игры.
+            wumpusWorld.CheckForBatsSound();
 
             while (true)
             {
-                Console.Write("Enter your move (W/A/S/D): ");
+                Console.Write("Enter your move (W/A/S/D) or 'F' to shoot: ");
                 char move = Console.ReadKey().KeyChar;
                 Console.WriteLine();
 
-                int newX = wumpusWorld.playerX;
-                int newY = wumpusWorld.playerY;
+                if (move == 'F')
+                {
+                    Console.Write("Enter the direction to shoot (W/A/S/D): ");
+                    char shootDirection = Console.ReadKey().KeyChar;
+                    int directionX = 0;
+                    int directionY = 0;
+
+                    switch (shootDirection)
+                    {
+                        case 'W':
+                            directionX = -1;
+                            break;
+                        case 'A':
+                            directionY = -1;
+                            break;
+                        case 'S':
+                            directionX = 1;
+                            break;
+                        case 'D':
+                            directionY = 1;
+                            break;
+                        default:
+                            Console.WriteLine("Invalid direction. Use W/A/S/D to shoot.");
+                            continue;
+                    }
+                    ICommand shootCommand = new ShootCommand(wumpusWorld.Player, wumpusWorld, directionX, directionY);
+                    wumpusWorld.ExecuteCommand(shootCommand);
+                    continue;
+                }
+
+                int newX = wumpusWorld.Player.X;
+                int newY = wumpusWorld.Player.Y;
 
                 switch (move)
                 {
@@ -41,14 +74,14 @@ namespace Wumpus
                     case 'S':
                         newX++;
                         break;
-                    case 'D':
+                    case 'D' :
                         newY++;
                         break;
                     default:
                         Console.WriteLine("Invalid move. Use W/A/S/D to move.");
                         continue;
                 }
-
+                wumpusWorld.RandomMoveWumpus();
                 wumpusWorld.MovePlayer(newX, newY);
             }
         }

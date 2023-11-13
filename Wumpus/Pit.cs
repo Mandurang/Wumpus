@@ -7,38 +7,15 @@ using System.Threading.Tasks;
 
 namespace Wumpus
 {
-    public class Pit
+    public class Pit : MapObject
     {
-        public int PitX { get; set; }
-        public int PitY { get; set; }
-
-        public Pit(int pitX, int pitY)
+        public const char symbol = 'P';
+        public Pit(int X, int Y)
         {
-            PitX = pitX;
-            PitY = pitY;
+            this.X = X;
+            this.Y = Y;
         }
         public Pit() { }
-
-        public List<Pit> PlacePits(int quantityPit, Random random, char[][] MapSquare, int worldSize)
-        {
-            List<Pit> pits = new List<Pit>();
-
-            for (int i = 0; i < quantityPit; i++)
-            {
-                int pitX, pitY;
-
-                do
-                {
-                    pitX = random.Next(worldSize);
-                    pitY = random.Next(worldSize);
-                } while (MapSquare[pitX][pitY] != '_');
-                MapSquare[pitX][pitY] = 'P';
-
-                pits.Add(new Pit(pitX, pitY));
-
-            }
-            return pits;
-        }
     }
 }
 
