@@ -14,7 +14,7 @@ namespace WumpusWorld
 
         public int Size { get; set; }
 
-        public Map()
+        public void GenereteMap()
         {
             GetMapSize();
             MapSquare = new Room[Size, Size];
@@ -25,7 +25,7 @@ namespace WumpusWorld
                     MapSquare[i, j] = new Room('_');
                 }
             }
-        }
+        }        
 
         private void GetMapSize()
         {

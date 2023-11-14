@@ -10,12 +10,22 @@ namespace WumpusWorld.MapObject
     {
         public char Content { get; set; }
 
-        public bool Visited { get; set; } = false;
+        private bool Visited { get; set; } 
 
         public Room(char content)
         {
             Content = content;
         }
         public Room() { }
+
+        public bool IsVisited()
+        {
+            return Visited = true;
+        }
+
+        public bool CheckVisit()
+        {
+            return Visited;
+        }
     }
 }

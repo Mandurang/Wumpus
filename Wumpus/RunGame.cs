@@ -14,10 +14,12 @@ namespace WumpusWorld
     public class RunGame 
     {
         private ValidService validSerivice = new ValidService();
+        private UserInputService userInputService = new UserInputService();
         public void Run()
         {
             Console.WriteLine("Welcome to Wumpus World!");
             Console.WriteLine("Legend: ? - Unexplored, _ - Explored, P - Player, P - Pit, W - Wumpus, B - Bats, T - Treasure");
+            
             WumpusWorldGame wumpusWorld = new WumpusWorldGame();
             wumpusWorld.SetQuantityPits();
             wumpusWorld.SetQuantityTreasures();
@@ -38,14 +40,14 @@ namespace WumpusWorld
                 {
                     Console.Write("Enter the direction to shoot (W/A/S/D): ");
                     char shootDirection = Console.ReadKey().KeyChar;
-                    int directionX = wumpusWorld.Player.X;
-                    int directionY = wumpusWorld.Player.Y;
+                    int targetX = wumpusWorld.Player.X;
+                    int targetY = wumpusWorld.Player.Y;
 
-                    var directionRoom = ExecuteDirection(shootDirection, directionX, directionY);
-                    directionX = directionRoom.X;
-                    directionY = directionRoom.Y;
+                    var destinationRoom = ExecuteDirection(shootDirection, targetX, targetY);
+                    targetX = destinationRoom.X;
+                    targetY = destinationRoom.Y;
                 
-                    ICommand shootCommand = new ShootCommand(wumpusWorld, directionX, directionY);
+                    ICommand shootCommand = new ShootCommand(wumpusWorld, targetX, targetY);
                     wumpusWorld.ExecuteCommand(shootCommand);
                     
                 }

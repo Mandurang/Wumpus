@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using WumpusWorld.Command;
 using WumpusWorld.MapObject;
-using static WumpusWorld.RunGame;
 
 namespace WumpusWorld
 {
@@ -43,6 +42,8 @@ namespace WumpusWorld
 
         public void GenerateWorld()
         {
+            Map.GenereteMap();
+
             Pits = placer.PlacePits(QuantityPits, random, Map.MapSquare);
 
             Treasures = placer.PlaceTreasures(QuantityTreasure, random, Map.MapSquare);
@@ -58,7 +59,8 @@ namespace WumpusWorld
         {
             Console.Clear();
 
-            int mapSize = Map.MapSquare.GetLength(0);
+            int mapSize = Map.Size;
+            
 
             for (int i = 0; i < mapSize; i++)
             {
@@ -69,19 +71,19 @@ namespace WumpusWorld
                     if (i == Player.X && j == Player.Y)
                     {
                         Console.Write("@ ");
-                        currentRoom.Visited = true; // Mark the current room as visited
+                        currentRoom.IsVisited(); // Mark the current room as visited
                     }
-                    else if (i == Wumpus.X && j == Wumpus.Y)
+                    else if (i == Wumpus.X && j == Wumpus.Y && currentRoom.CheckVisit())
                     {
                         Console.Write("W ");
                     }
-                    else if (currentRoom.Visited)
+                    else if (currentRoom.CheckVisit())
                     {
                         Console.Write(currentRoom.Content + " ");
                     }
                     else
                     {
-                        Console.Write(currentRoom.Content + " ");//Console.Write("? ");
+                        Console.Write("? ");//Console.Write(currentRoom.Content + " ");
                     }
                 }
                 Console.WriteLine();

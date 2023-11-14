@@ -9,57 +9,57 @@ namespace WumpusWorld.Command
 {
     public class MoveCommand : ICommand
     {
-        private Player player;
-        private int newX, newY;
-        private Map map;
-        private Random random;
+        private Player _player;
+        private int _newX, _newY;
+        private Map _map;
+        private Random _random;
 
         public MoveCommand(Player player, int newX, int newY, Map map)
         {
-            this.player = player;
-            this.newX = newX;
-            this.newY = newY;
-            this.map = map;
-            this.random = new Random();
-        }
+            this._player = player;
+            this._newX = newX;
+            this._newY = newY;
+            this._map = map;
+            this._random = new Random();
+        }   
 
         public void Execute()
         {
-            MovePlayer(newX, newY);
+            MovePlayer(_newX, _newY);
         }
 
         private void MovePlayer(int newX, int newY)
         {
-            player.X = newX; player.Y = newY;
+            _player.X = newX; _player.Y = newY;
 
-            var content = map.MapSquare[player.X, player.Y].Content;
+            var content = _map.MapSquare[_player.X, _player.Y].Content;
 
-            if (content == 'P')
+            if (content == Pit.symbol)
             {
                 Console.WriteLine("Game over! You fell into a pit.");
                 Environment.Exit(0);
             }
 
-            if (content == 'B')
+            if (content == Bat.symbol)
             {
                 Console.WriteLine("Encountered the Bat! You've been carried to a new location.");
 
-                int mapSize = map.MapSquare.GetLength(0);
+                int mapSize = _map.Size;
 
                 do
                 {
-                    newX = random.Next(mapSize);
-                    newY = random.Next(mapSize);
+                    newX = _random.Next(mapSize);
+                    newY = _random.Next(mapSize);
                 }
-                while (newX == player.X && newY == player.Y);
+                while (newX == _player.X && newY == _player.Y);
 
-                player.X = newX;
-                player.Y = newY;
+                _player.X = newX;
+                _player.Y = newY;
 
                 GetProblemOnMove();
             }
 
-            if (content == 'T')
+            if (content == Treasure.symbol)
             {
                 Console.WriteLine("Congratulations! You found the treasure and won the game.");
                 Environment.Exit(0);
@@ -68,15 +68,15 @@ namespace WumpusWorld.Command
 
         private void GetProblemOnMove()
         {
-            var content = map.MapSquare[player.X, player.Y].Content;
+            var content = _map.MapSquare[_player.X, _player.Y].Content;
 
-            if (content == 'P')
+            if (content == Pit.symbol)
             {
                 Console.WriteLine("Game over! You fell into a pit.");
                 Environment.Exit(0);
             }
 
-            if (content == 'T')
+            if (content == Treasure.symbol)
             {
                 Console.WriteLine("Congratulations! You found the treasure and won the game.");
                 Environment.Exit(0);
