@@ -32,7 +32,6 @@ namespace WumpusWorld
         private List<ICommand> commandHistory = new List<ICommand>();
 
         private UserInputService userInputService = new UserInputService();
-        private ValidService validSerivice = new ValidService();
 
         public WumpusWorldGame()
         {
@@ -144,17 +143,17 @@ namespace WumpusWorld
 
         private bool IsWumpus(int playerX, int playerY, int wumpusX, int wumpusY)
         {
-            return validSerivice.IsValid(wumpusX, wumpusY, Map.Size) && playerX == wumpusX && playerY == wumpusY;
+            return Map.IsValid(wumpusX, wumpusY) && playerX == wumpusX && playerY == wumpusY;
         }
 
         private bool IsBat(int x, int y)
         {
-            return validSerivice.IsValid(x, y, Map.Size) && Map.MapSquare[x, y].Content == Bat.symbol;
+            return Map.IsValid(x, y) && Map.MapSquare[x, y].Content == Bat.symbol;
         }
 
         private bool IsPit(int x, int y)
         {
-            return validSerivice.IsValid(x, y, Map.Size) && Map.MapSquare[x, y].Content == Pit.symbol;
+            return Map.IsValid(x, y) && Map.MapSquare[x, y].Content == Pit.symbol;
         }
 
         public void ExecuteCommand(ICommand command)

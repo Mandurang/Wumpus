@@ -48,9 +48,6 @@ namespace WumpusWorld
 
             do
             {
-                //Console.Write("Enter your move (W/A/S/D) or press 'Ctrl' to shoot: ");
-                //char move = Console.ReadKey().KeyChar;
-                //Console.WriteLine();
 
                 direction = ExecuteDirectionV3(move);
 

@@ -38,14 +38,5 @@ namespace WumpusWorld
         {
             return x >= 0 && x < Size && y >= 0 && y < Size;
         }
-
-        //public Room GetRoom(int x, int y)
-        //{
-        //    if (IsValid(x, y))
-        //    {
-        //        return MapSquare[x, y];
-        //    }
-        //    return null;
-        //}
     }
 }

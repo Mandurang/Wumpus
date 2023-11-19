@@ -10,19 +10,9 @@ namespace WumpusWorld.Command
     public class MoveCommand : ICommand
     {
         private Player _player;
-        private int _newX, _newY;
         private Map _map;
         private Random _random;
         private Direction? _direction;
-
-        public MoveCommand(Player player, int newX, int newY, Map map)
-        {
-            _player = player;
-            _newX = newX;
-            _newY = newY;
-            _map = map;
-            _random = new Random();
-        }
 
         public MoveCommand(Player player, Direction? direction, Map map)
         {
@@ -34,87 +24,7 @@ namespace WumpusWorld.Command
 
         public void Execute()
         {
-            MovePlayerV2();
-        }
-
-        private void MovePlayer(int newX, int newY)
-        {
-            _player.X = newX; _player.Y = newY;
-
-            var content = _map.MapSquare[_player.X, _player.Y].Content;
-
-            if (content == Pit.symbol)
-            {
-                Console.WriteLine("Game over! You fell into a pit.");
-                Environment.Exit(0);
-            }
-
-            if (content == Bat.symbol)
-            {
-                Console.WriteLine("Encountered the Bat! You've been carried to a new location.");
-
-                int mapSize = _map.Size;
-
-                do
-                {
-                    newX = _random.Next(mapSize);
-                    newY = _random.Next(mapSize);
-                }
-                while (newX == _player.X && newY == _player.Y);
-
-                _player.X = newX;
-                _player.Y = newY;
-
-                GetProblemOnMoveV2(newX, newY);
-            }
-
-            if (content == Treasure.symbol)
-            {
-                Console.WriteLine("Congratulations! You found the treasure and won the game.");
-                Environment.Exit(0);
-            }
-        }
-
-        private void GetProblemOnMoveV2(int newX, int newY)
-        {
-            var content = _map.MapSquare[_player.X, _player.Y].Content;
-
-            if (content == Pit.symbol)
-            {
-                Console.WriteLine("Game over! You fell into a pit.");
-                Environment.Exit(0);
-            }
-
-            if (content == Treasure.symbol)
-            {
-                Console.WriteLine("Congratulations! You found the treasure and won the game.");
-                Environment.Exit(0);
-            }
-
-            if (content == Bat.symbol)
-            {
-                Console.WriteLine("Encountered the Bat! You've been carried to a new location.");
-
-                int mapSize = _map.Size;
-
-                do
-                {
-                    newX = _random.Next(mapSize);
-                    newY = _random.Next(mapSize);
-                }
-                while (newX == _player.X && newY == _player.Y);
-
-                _player.X = newX;
-                _player.Y = newY;
-            }
-        }
-
-        enum ContentOnMove
-        {
-            FacedWithPit,
-            FacedWithTreasure,
-            FacedWithBat,
-            FacedWithRoom
+            MovePlayer();
         }
 
         private ContentOnMove GetContentOnMoveV2(char content)
@@ -128,7 +38,7 @@ namespace WumpusWorld.Command
             };
         }
 
-        private void MovePlayerV2()
+        private void MovePlayer()
         {
             if(_direction is not null)
             {
@@ -158,16 +68,7 @@ namespace WumpusWorld.Command
             {
                 Console.WriteLine("Invalid move. You can't go outside the map.");
                 return;
-            }
-
-
-            //if (!validSerivice.IsValid(newX, newY, wumpusWorld.Map.Size))
-            //{
-            //    Console.WriteLine("Invalid move. You can't go outside the map.");
-            //    continue;
-            //}
-
-           
+            }           
         }
 
         private ICheckResult CheckContent()
@@ -234,6 +135,14 @@ namespace WumpusWorld.Command
         record GameFinished(string Message) : ICheckResult;
         record PlayerMoved(int X, int Y) : ICheckResult;
         record Nothing() : ICheckResult;
+
+        enum ContentOnMove
+        {
+            FacedWithPit,
+            FacedWithTreasure,
+            FacedWithBat,
+            FacedWithRoom
+        }
 
     } 
 }

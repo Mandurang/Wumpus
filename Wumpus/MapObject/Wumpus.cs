@@ -10,7 +10,7 @@ namespace WumpusWorld.MapObject
     {
         public const char symbol = 'W';
         public Random random = new Random();
-        private ValidService validSerivice = new ValidService();
+
         public Wumpus(int X, int Y)
         {
             this.X = X;
@@ -46,7 +46,7 @@ namespace WumpusWorld.MapObject
                             newY = Y + 1;
                             break;
                     }
-                } while (!validSerivice.IsValid(newX, newY, map.Size));
+                } while (!map.IsValid(newX, newY));
                 X = newX;
                 Y = newY;
             }
