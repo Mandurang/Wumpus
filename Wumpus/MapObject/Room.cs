@@ -10,7 +10,9 @@ namespace WumpusWorld.MapObject
     {
         public char Content { get; set; }
 
-        private bool Visited { get; set; } 
+        private bool Visited { get; set; }
+
+        public const char symbol = '_';
 
         public Room(char content)
         {

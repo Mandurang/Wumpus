@@ -25,13 +25,18 @@ namespace WumpusWorld
                     MapSquare[i, j] = new Room('_');
                 }
             }
-        }        
+        }
 
         private void GetMapSize()
         {
             UserInputService userInput = new UserInputService();
 
             Size = userInput.GetValidUserInput("Enter the size of the map:");
+        }
+
+        public bool IsValid(int x, int y)
+        {
+            return x >= 0 && x < Size && y >= 0 && y < Size;
         }
 
         //public Room GetRoom(int x, int y)

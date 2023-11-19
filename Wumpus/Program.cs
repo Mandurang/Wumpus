@@ -6,6 +6,6 @@ class Program
     static void Main(string[] args)
     {
         RunGame game = new RunGame();
-        game.Run();
+        game.RunV3();
     }
 }

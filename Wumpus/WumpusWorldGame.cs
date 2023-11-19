@@ -73,7 +73,7 @@ namespace WumpusWorld
                         Console.Write("@ ");
                         currentRoom.IsVisited(); // Mark the current room as visited
                     }
-                    else if (i == Wumpus.X && j == Wumpus.Y && currentRoom.CheckVisit())
+                    else if (i == Wumpus.X && j == Wumpus.Y /*&& currentRoom.CheckVisit()*/)
                     {
                         Console.Write("W ");
                     }
