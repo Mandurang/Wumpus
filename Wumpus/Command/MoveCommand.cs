@@ -9,10 +9,19 @@ namespace WumpusWorld.Command
 {
     public class MoveCommand : ICommand
     {
+        interface ICheckResult
+        {
+
+        }
+
         private Player _player;
         private Map _map;
         private Random _random;
         private Direction? _direction;
+        private DirectionVector _directionVector = new DirectionVector();
+        record GameFinished(string Message) : ICheckResult;
+        record PlayerMoved(int X, int Y) : ICheckResult;
+        record Nothing() : ICheckResult;
 
         public MoveCommand(Player player, Direction? direction, Map map)
         {
@@ -21,6 +30,7 @@ namespace WumpusWorld.Command
             _random = new Random();
             _direction = direction;
         }
+
 
         public void Execute()
         {
@@ -42,16 +52,10 @@ namespace WumpusWorld.Command
         {
             if(_direction is not null)
             {
-                var (dx, dy) = _direction switch
-                {
-                    Direction.Up => (-1, 0),
-                    Direction.Down => (1, 0),
-                    Direction.Left => (0, -1),
-                    Direction.Right => (0, 1),
-                };
+                DirectionVector directionVector = _directionVector.GetDirection(_direction);
 
-                int newX = _player.X + dx;
-                int newY = _player.Y + dy;
+                int newX = _player.X + directionVector.X;
+                int newY = _player.Y + directionVector.Y;
 
                 if (!_map.IsValid(newX, newY))
                 {
@@ -127,15 +131,6 @@ namespace WumpusWorld.Command
             return new Nothing();
         }
 
-        interface ICheckResult
-        {
-            
-        }
-
-        record GameFinished(string Message) : ICheckResult;
-        record PlayerMoved(int X, int Y) : ICheckResult;
-        record Nothing() : ICheckResult;
-
         enum ContentOnMove
         {
             FacedWithPit,
@@ -143,7 +138,6 @@ namespace WumpusWorld.Command
             FacedWithBat,
             FacedWithRoom
         }
-
     } 
 }
 

@@ -11,6 +11,7 @@ namespace WumpusWorld.Command
     {
         private WumpusWorldGame _wumpusWorldGame;
         private Direction? _direction;
+        private DirectionVector _directionVector = new DirectionVector();
 
         public ShootCommand(WumpusWorldGame wumpusWorldGame, Direction? direction)
         {
@@ -22,20 +23,16 @@ namespace WumpusWorld.Command
         {
             ShootArrow(_direction, _wumpusWorldGame);
         }
-
+        
         private void ShootArrow(Direction? direction, WumpusWorldGame wumpusWorldGame)
         {
-            var (dx, dy) = _direction switch
-            {
-                Direction.Up => (-1, 0),
-                Direction.Down => (1, 0),
-                Direction.Left => (0, -1),
-                Direction.Right => (0, 1),
-            };
+            DirectionVector directionVector = _directionVector.GetDirection(_direction);
+
             int playerX = wumpusWorldGame.Player.X;
             int playerY = wumpusWorldGame.Player.Y;
-            int newX = playerX + dx;
-            int newY = playerY + dy;
+
+            int newX = playerX + directionVector.X;
+            int newY = playerY + directionVector.Y;
 
             int wumpusX = wumpusWorldGame.Wumpus.X;
             int wumpusY = wumpusWorldGame.Wumpus.Y;

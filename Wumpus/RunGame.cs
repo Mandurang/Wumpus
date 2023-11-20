@@ -27,7 +27,7 @@ namespace WumpusWorld
             wumpusWorld.PrintWorld();
             wumpusWorld.CheckForWumpusSmell(); // Проверка запаха Wumpus при старте игры.
             wumpusWorld.CheckForPitWind();    // Проверка драфта (яма) при старте игры.
-            wumpusWorld.CheckForBatsSound(); // Проверка запаха Wumpus после перемещения игрока.
+            wumpusWorld.CheckForBatsSound(); // Проверка запаха Wumpus Aпосле перемещения игрока.
 
             do
             {
