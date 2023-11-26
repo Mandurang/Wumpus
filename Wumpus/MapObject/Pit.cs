@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-namespace Wumpus
+namespace WumpusWorld.MapObject
 {
     public class Pit : MapObject
     {
+        public const char symbol = 'P';
         public Pit(int X, int Y)
         {
             this.X = X;

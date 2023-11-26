@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Wumpus
+namespace WumpusWorld.MapObject
 {
-    public class Bet : MapObject
+    public class Bat : MapObject
     {
-        public Bet(int X, int Y)
+        public const char symbol = 'B';
+        public Bat(int X, int Y)
         {
             X = X;
             Y = Y;
         }
-        public Bet() { }
+        public Bat() { }
     }
 }

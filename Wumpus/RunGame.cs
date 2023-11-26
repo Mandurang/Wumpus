@@ -1,30 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using WumpusWorld.Command;
+using static WumpusWorld.RunGame;
+using WumpusWorld.MapObject;
 
-namespace Wumpus
+namespace WumpusWorld
 {
-    public class RunGame
+    public class RunGame 
     {
+        private ValidService validSerivice = new ValidService();
         public void Run()
         {
-            WumpusWorldGame wumpusWorld = new WumpusWorldGame();
             Console.WriteLine("Welcome to Wumpus World!");
-            Console.WriteLine("Legend: ? - Unexplored, _ - Empty, P - Player, P - Pit, W - Wumpus, B - Bets, G - Gold");
-            wumpusWorld.SetWorldSize();
-            wumpusWorld.SetQuantityWupus();
+            Console.WriteLine("Legend: ? - Unexplored, _ - Explored, P - Player, P - Pit, W - Wumpus, B - Bats, T - Treasure");
+            WumpusWorldGame wumpusWorld = new WumpusWorldGame();
             wumpusWorld.SetQuantityPits();
-            wumpusWorld.SetQuantityTreasure();
-            wumpusWorld.SetQuantityBet();
+            wumpusWorld.SetQuantityTreasures();
+            wumpusWorld.SetQuantityBats();
             wumpusWorld.GenerateWorld(); // Генерация случайного мира.
             wumpusWorld.PrintWorld();
             wumpusWorld.CheckForWumpusSmell(); // Проверка запаха Wumpus при старте игры.
             wumpusWorld.CheckForPitWind();    // Проверка драфта (яма) при старте игры.
-            wumpusWorld.CheckForBetsSound();
+            wumpusWorld.CheckForBatsSound(); // Проверка запаха Wumpus после перемещения игрока.
 
-            while (true)
+            do
             {
                 Console.Write("Enter your move (W/A/S/D) or 'F' to shoot: ");
                 char move = Console.ReadKey().KeyChar;
@@ -34,56 +38,81 @@ namespace Wumpus
                 {
                     Console.Write("Enter the direction to shoot (W/A/S/D): ");
                     char shootDirection = Console.ReadKey().KeyChar;
-                    int directionX = 0;
-                    int directionY = 0;
+                    int directionX = wumpusWorld.Player.X;
+                    int directionY = wumpusWorld.Player.Y;
 
-                    switch (shootDirection)
+                    var directionRoom = ExecuteDirection(shootDirection, directionX, directionY);
+                    directionX = directionRoom.X;
+                    directionY = directionRoom.Y;
+                
+                    ICommand shootCommand = new ShootCommand(wumpusWorld, directionX, directionY);
+                    wumpusWorld.ExecuteCommand(shootCommand);
+                    
+                }
+                else
+                {
+                    int newX = wumpusWorld.Player.X;
+                    int newY = wumpusWorld.Player.Y;
+
+                    var directionRoom = ExecuteDirection(move, newX, newY);
+
+                    newX = directionRoom.X;
+                    newY = directionRoom.Y;
+
+                    if (!validSerivice.IsValid(newX, newY, wumpusWorld.Map.Size))
                     {
-                        case 'W':
-                            directionX = -1;
-                            break;
-                        case 'A':
-                            directionY = -1;
-                            break;
-                        case 'S':
-                            directionX = 1;
-                            break;
-                        case 'D':
-                            directionY = 1;
-                            break;
-                        default:
-                            Console.WriteLine("Invalid direction. Use W/A/S/D to shoot.");
-                            continue;
+                        Console.WriteLine("Invalid move. You can't go outside the map.");
+                        continue;
                     }
 
-                    wumpusWorld.ShootArrow(directionX, directionY);
-                    continue;
+                    ICommand movePlayer = new MoveCommand(wumpusWorld.Player, newX, newY, wumpusWorld.Map, wumpusWorld.Wumpus);
+                    wumpusWorld.ExecuteCommand(movePlayer);
                 }
+            } while (true);
+        }
 
-                int newX = wumpusWorld.Player.X;
-                int newY = wumpusWorld.Player.Y;
+        private Room ExecuteDirection(char move, int directionX, int directionY)
+        {
+            Room room = new Room { X = directionX, Y = directionY };
 
+            bool validMove = true;
+
+            do
+            {
                 switch (move)
                 {
                     case 'W':
-                        newX--;
+                        room.X--;
+                        validMove = true;
                         break;
                     case 'A':
-                        newY--;
+                        room.Y--;
+                        validMove = true;
                         break;
                     case 'S':
-                        newX++;
+                        room.X++;
+                        validMove = true;
                         break;
-                    case 'D' :
-                        newY++;
+                    case 'D':
+                        room.Y++;
+                        validMove = true;
                         break;
                     default:
                         Console.WriteLine("Invalid move. Use W/A/S/D to move.");
-                        continue;
+                        validMove = false;
+                        break;
                 }
-                wumpusWorld.RandomMoveWumpus();
-                wumpusWorld.MovePlayer(newX, newY);
-            }
+
+                if (!validMove)
+                {
+                    Console.Write("Enter a valid move: ");
+                    move = Console.ReadKey().KeyChar;
+                    Console.WriteLine(); // Переход на новую строку после ввода
+                }
+
+            } while (!validMove);
+
+            return room;
         }
     }
 }
