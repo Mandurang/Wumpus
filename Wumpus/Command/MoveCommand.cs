@@ -37,7 +37,7 @@ namespace WumpusWorld.Command
             MovePlayer();
         }
 
-        private ContentOnMove GetContentOnMoveV2(char content)
+        private ContentOnMove GetContentOnMove(char content)
         {
             return content switch
             {
@@ -99,7 +99,7 @@ namespace WumpusWorld.Command
         {
             var content = _map.MapSquare[_player.X, _player.Y].Content;
 
-            var problem = GetContentOnMoveV2(content);
+            var problem = GetContentOnMove(content);
 
             if (problem == ContentOnMove.FacedWithPit)
             {
@@ -114,14 +114,16 @@ namespace WumpusWorld.Command
             if (problem == ContentOnMove.FacedWithBat)
             {
                 Console.WriteLine("Encountered the Bat! You've been carried to a new location.");
-
-                int mapSize = _map.Size;
+                
+                int mapSizeWidth = _map.Width;
+                int mapSizeHeight = _map.Height;
+                
                 int newX, newY;
 
                 do
                 {
-                    newX = _random.Next(mapSize);
-                    newY = _random.Next(mapSize);
+                    newX = _random.Next(mapSizeWidth);
+                    newY = _random.Next(mapSizeHeight);
                 }
                 while (newX == _player.X && newY == _player.Y);
 
@@ -140,5 +142,3 @@ namespace WumpusWorld.Command
         }
     } 
 }
-
-

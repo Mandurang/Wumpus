@@ -58,21 +58,23 @@ namespace WumpusWorld
         {
             Console.Clear();
 
-            int mapSize = Map.Size;
+            int mapSizeWidth = Map.Width;
+            int mapSizeHeight = Map.Height;
             
 
-            for (int i = 0; i < mapSize; i++)
+            for (int i = 0; i < mapSizeWidth; i++)
             {
-                for (int j = 0; j < mapSize; j++)
+                for (int j = 0; j < mapSizeHeight; j++)
                 {
                     Room currentRoom = Map.MapSquare[i, j];
 
                     if (i == Player.X && j == Player.Y)
                     {
                         Console.Write("@ ");
-                        currentRoom.IsVisited(); // Mark the current room as visited
+                        // Mark the current room as visited when the player is in it
+                        currentRoom.IsVisited();
                     }
-                    else if (i == Wumpus.X && j == Wumpus.Y /*&& currentRoom.CheckVisit()*/)
+                    else if (i == Wumpus.X && j == Wumpus.Y && currentRoom.CheckVisit())
                     {
                         Console.Write("W ");
                     }
@@ -82,12 +84,13 @@ namespace WumpusWorld
                     }
                     else
                     {
-                        Console.Write("? ");//Console.Write(currentRoom.Content + " ");
+                        Console.Write("? ");
                     }
                 }
                 Console.WriteLine();
             }
         }
+
 
         public void CheckForWumpusSmell()
         {

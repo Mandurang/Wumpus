@@ -48,7 +48,6 @@ namespace WumpusWorld
 
             do
             {
-
                 direction = ExecuteDirectionV3(move);
 
                 if (direction is null)

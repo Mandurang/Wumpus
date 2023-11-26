@@ -12,15 +12,16 @@ namespace WumpusWorld
     {
         public Room[,] MapSquare { get; set; }
 
-        public int Size { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
 
         public void GenereteMap()
         {
             GetMapSize();
-            MapSquare = new Room[Size, Size];
-            for (int i = 0; i < Size; i++)
+            MapSquare = new Room[Width, Height];
+            for (int i = 0; i < Width; i++)
             {
-                for (int j = 0; j < Size; j++)
+                for (int j = 0; j < Height; j++)
                 {
                     MapSquare[i, j] = new Room('_');
                 }
@@ -31,12 +32,13 @@ namespace WumpusWorld
         {
             UserInputService userInput = new UserInputService();
 
-            Size = userInput.GetValidUserInput("Enter the size of the map:");
+            Width = userInput.GetValidUserInput("Enter the Width of the map:");
+            Height = userInput.GetValidUserInput("Enter the Height of the map:");
         }
 
         public bool IsValid(int x, int y)
         {
-            return x >= 0 && x < Size && y >= 0 && y < Size;
+            return x >= 0 && x < Width && y >= 0 && y < Height;
         }
     }
 }
