@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Wumpus
+namespace WumpusWorld.MapObject
 {
     public class Bat : MapObject
     {
