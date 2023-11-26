@@ -25,7 +25,7 @@ namespace WumpusWorld.Command
             RandomMoveWumpus();
         }
 
-        public void RandomMoveWumpus()
+        private void RandomMoveWumpus()
         {
             int chanceMoveWumpus = Random.Next(1, 5);
 
