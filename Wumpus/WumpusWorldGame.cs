@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using WumpusWorld.Command;
 using WumpusWorld.MapObject;
-using static WumpusWorld.RunGame;
 
 namespace WumpusWorld
 {
@@ -33,7 +32,6 @@ namespace WumpusWorld
         private List<ICommand> commandHistory = new List<ICommand>();
 
         private UserInputService userInputService = new UserInputService();
-        private ValidService validSerivice = new ValidService();
 
         public WumpusWorldGame()
         {
@@ -43,6 +41,8 @@ namespace WumpusWorld
 
         public void GenerateWorld()
         {
+            Map.GenereteMap();
+
             Pits = placer.PlacePits(QuantityPits, random, Map.MapSquare);
 
             Treasures = placer.PlaceTreasures(QuantityTreasure, random, Map.MapSquare);
@@ -58,35 +58,38 @@ namespace WumpusWorld
         {
             Console.Clear();
 
-            int mapSize = Map.MapSquare.GetLength(0);
-
-            for (int i = 0; i < mapSize; i++)
+            int mapSizeWidth = Map.Width;
+            int mapSizeHeight = Map.Height;
+           
+            for (int i = 0; i < mapSizeWidth; i++)
             {
-                for (int j = 0; j < mapSize; j++)
+                for (int j = 0; j < mapSizeHeight; j++)
                 {
                     Room currentRoom = Map.MapSquare[i, j];
 
                     if (i == Player.X && j == Player.Y)
                     {
                         Console.Write("@ ");
-                        currentRoom.Visited = true; // Mark the current room as visited
+                        // Mark the current room as visited when the player is in it
+                        currentRoom.IsVisited();
                     }
-                    else if (i == Wumpus.X && j == Wumpus.Y)
+                    else if (i == Wumpus.X && j == Wumpus.Y && currentRoom.CheckVisit())
                     {
                         Console.Write("W ");
                     }
-                    else if (currentRoom.Visited)
+                    else if (currentRoom.CheckVisit())
                     {
                         Console.Write(currentRoom.Content + " ");
                     }
                     else
                     {
-                        Console.Write(currentRoom.Content + " ");//Console.Write("? ");
+                        Console.Write("? ");
                     }
                 }
                 Console.WriteLine();
             }
         }
+
 
         public void CheckForWumpusSmell()
         {
@@ -142,24 +145,23 @@ namespace WumpusWorld
 
         private bool IsWumpus(int playerX, int playerY, int wumpusX, int wumpusY)
         {
-            return validSerivice.IsValid(wumpusX, wumpusY, Map.Size) && playerX == wumpusX && playerY == wumpusY;
+            return Map.IsValid(wumpusX, wumpusY) && playerX == wumpusX && playerY == wumpusY;
         }
 
         private bool IsBat(int x, int y)
         {
-            return validSerivice.IsValid(x, y, Map.Size) && Map.MapSquare[x, y].Content == 'B';
+            return Map.IsValid(x, y) && Map.MapSquare[x, y].Content == Bat.symbol;
         }
 
         private bool IsPit(int x, int y)
         {
-            return validSerivice.IsValid(x, y, Map.Size) && Map.MapSquare[x, y].Content == 'P';
+            return Map.IsValid(x, y) && Map.MapSquare[x, y].Content == Pit.symbol;
         }
 
         public void ExecuteCommand(ICommand command)
         {
             command.Execute();
             commandHistory.Add(command);
-            Wumpus.RandomMoveWumpus(Map);
             Encountered(Player.X, Player.Y, Wumpus.X, Wumpus.Y);
             PrintWorld();
             CheckForWumpusSmell();

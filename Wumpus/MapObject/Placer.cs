@@ -10,12 +10,13 @@ namespace WumpusWorld.MapObject
     {
         public Wumpus PlaceWumpus(Random random, Room[,] mapSquare)
         {
-            int worldSize = mapSquare.GetLength(0);
+            int worldSizeWidth = mapSquare.GetLength(0);
+            int worldSizeHeight = mapSquare.GetLength(1);
             int X, Y;
             do
             {
-                X = random.Next(worldSize);
-                Y = random.Next(worldSize);
+                X = random.Next(worldSizeWidth);
+                Y = random.Next(worldSizeHeight);
             } while (mapSquare[X, Y].Content != '_');
             
             Wumpus wumpus = new Wumpus(X, Y);
@@ -24,13 +25,15 @@ namespace WumpusWorld.MapObject
 
         public Player PlacePlayer(Random random, Room[,] mapSquare)
         {
-            int worldSize = mapSquare.GetLength(0);
+            int worldSizeWidth = mapSquare.GetLength(0);
+            int worldSizeHeight = mapSquare.GetLength(1);
             int X, Y;
             do
             {
-                X = random.Next(worldSize);
-                Y = random.Next(worldSize);
+                X = random.Next(worldSizeWidth);
+                Y = random.Next(worldSizeHeight);
             } while (mapSquare[X, Y].Content != '_');
+
             Player player = new Player(X, Y);
             return player;
         }
@@ -54,7 +57,8 @@ namespace WumpusWorld.MapObject
         {
             List<T> mapObjects = new List<T>();
 
-            int worldSize = mapSquare.GetLength(0);
+            int worldSizeWidth = mapSquare.GetLength(0);
+            int worldSizeHeight = mapSquare.GetLength(1);
 
             for (int i = 0; i < quantity; i++)
             {
@@ -62,8 +66,8 @@ namespace WumpusWorld.MapObject
 
                 do
                 {
-                    X = random.Next(worldSize);
-                    Y = random.Next(worldSize);
+                    X = random.Next(worldSizeWidth);
+                    Y = random.Next(worldSizeHeight);
                 } while (mapSquare[X, Y].Content != '_');
                 mapSquare[X, Y].Content = symbol;
                 T newObject = new T { X = X, Y = Y };
