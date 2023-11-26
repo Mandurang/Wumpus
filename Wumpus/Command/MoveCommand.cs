@@ -31,7 +31,6 @@ namespace WumpusWorld.Command
             _direction = direction;
         }
 
-
         public void Execute()
         {
             MovePlayer();

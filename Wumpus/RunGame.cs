@@ -49,6 +49,10 @@ namespace WumpusWorld
                     ICommand movePlayer = new MoveCommand(wumpusWorld.Player, inputUserDirection, wumpusWorld.Map);
                     wumpusWorld.ExecuteCommand(movePlayer);
                 }
+
+                ICommand moveRandomMoveWumpus = new RandomMoveCommand(wumpusWorld.Wumpus, wumpusWorld.Map);
+                wumpusWorld.ExecuteCommand(moveRandomMoveWumpus);
+
             } while (true);
         }
     }

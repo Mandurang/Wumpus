@@ -32,6 +32,22 @@ namespace WumpusWorld
             return new DirectionVector(x, y);
         }
 
+        public DirectionVector GetRandomDirection()
+        {
+            var random = new Random();
+            int randomMove = random.Next(1, 5);
+
+            var (x, y) = randomMove switch
+            {
+                1 => (-1, 0), // Up
+                2 => (1, 0),  // Down
+                3 => (0, -1), // Left
+                4 => (0, 1),  // Right
+                _ => (0, 0)   // No movement (default case)
+            };
+
+            return new DirectionVector(x, y);
+        }
     }
 
     public enum Direction

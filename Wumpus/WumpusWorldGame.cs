@@ -60,8 +60,7 @@ namespace WumpusWorld
 
             int mapSizeWidth = Map.Width;
             int mapSizeHeight = Map.Height;
-            
-
+           
             for (int i = 0; i < mapSizeWidth; i++)
             {
                 for (int j = 0; j < mapSizeHeight; j++)
@@ -163,7 +162,6 @@ namespace WumpusWorld
         {
             command.Execute();
             commandHistory.Add(command);
-            Wumpus.RandomMoveWumpus(Map);
             Encountered(Player.X, Player.Y, Wumpus.X, Wumpus.Y);
             PrintWorld();
             CheckForWumpusSmell();
