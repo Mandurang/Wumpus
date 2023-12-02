@@ -9,82 +9,135 @@ namespace WumpusWorld.Command
 {
     public class MoveCommand : ICommand
     {
-        private Player player;
-        private int newX, newY;
-        private Map map;
-        private Random random;
-        private Wumpus wumpus;
-
-        public MoveCommand(Player player, int newX, int newY, Map map, Wumpus wumpus)
+        interface ICheckResult
         {
-            this.player = player;
-            this.newX = newX;
-            this.newY = newY;
-            this.map = map;
-            this.random = new Random();
-            this.wumpus = wumpus;
+
+        }
+
+        private Player _player;
+        private Map _map;
+        private Random _random;
+        private Direction? _direction;
+        private DirectionVector _directionVector = new DirectionVector();
+        record GameFinished(string Message) : ICheckResult;
+        record PlayerMoved(int X, int Y) : ICheckResult;
+        record Nothing() : ICheckResult;
+
+        public MoveCommand(Player player, Direction? direction, Map map)
+        {
+            _player = player;
+            _map = map;
+            _random = new Random();
+            _direction = direction;
         }
 
         public void Execute()
         {
-            MovePlayer(newX, newY);
+            MovePlayer();
         }
 
-        private void MovePlayer(int newX, int newY)
+        private ContentOnMove GetContentOnMove(char content)
         {
-            player.X = newX; player.Y = newY;
-
-            var content = map.MapSquare[player.X, player.Y].Content;
-
-            if (content == 'P')
+            return content switch
             {
-                Console.WriteLine("Game over! You fell into a pit.");
+                Pit.symbol => ContentOnMove.FacedWithPit,
+                Treasure.symbol => ContentOnMove.FacedWithTreasure,
+                Bat.symbol => ContentOnMove.FacedWithBat,
+                Room.symbol => ContentOnMove.FacedWithRoom
+            };
+        }
+
+        private void MovePlayer()
+        {
+            if(_direction is not null)
+            {
+                DirectionVector directionVector = _directionVector.GetDirection(_direction);
+
+                int newX = _player.X + directionVector.X;
+                int newY = _player.Y + directionVector.Y;
+
+                if (!_map.IsValid(newX, newY))
+                {
+                    Console.WriteLine("Invalid move. You can't go outside the map.");
+                    return;
+                }
+
+                _player.X = newX;
+                _player.Y = newY;
+
+                CheckContent();
+            }
+            else
+            {
+                Console.WriteLine("Invalid move. You can't go outside the map.");
+                return;
+            }           
+        }
+
+        private ICheckResult CheckContent()
+        {
+            var result = CheckContentIter();
+
+            if (result is GameFinished gameFinished)
+            {
+                Console.WriteLine(gameFinished.Message);
                 Environment.Exit(0);
             }
 
-            if (content == 'B')
+            if (result is PlayerMoved playerMoved)
+            {
+                _player.X = playerMoved.X; _player.Y = playerMoved.Y;
+
+                return CheckContent();
+            }
+
+            return new Nothing();
+        }
+
+        private ICheckResult CheckContentIter()
+        {
+            var content = _map.MapSquare[_player.X, _player.Y].Content;
+
+            var problem = GetContentOnMove(content);
+
+            if (problem == ContentOnMove.FacedWithPit)
+            {
+                return new GameFinished("Game over! You fell into a pit.");
+            }
+
+            if (problem == ContentOnMove.FacedWithTreasure)
+            {
+                return new GameFinished("Congratulations! You found the treasure and won the game.");
+            }
+
+            if (problem == ContentOnMove.FacedWithBat)
             {
                 Console.WriteLine("Encountered the Bat! You've been carried to a new location.");
-
-                int mapSize = map.MapSquare.GetLength(0);
+                
+                int mapSizeWidth = _map.Width;
+                int mapSizeHeight = _map.Height;
+                
+                int newX, newY;
 
                 do
                 {
-                    newX = random.Next(mapSize);
-                    newY = random.Next(mapSize);
+                    newX = _random.Next(mapSizeWidth);
+                    newY = _random.Next(mapSizeHeight);
                 }
-                while (newX == player.X && newY == player.Y);
+                while (newX == _player.X && newY == _player.Y);
 
-                player.X = newX;
-                player.Y = newY;
-
-                GetProblemOnMove();
+                return new PlayerMoved(newX, newY);
             }
 
-            if (content == 'T')
-            {
-                Console.WriteLine("Congratulations! You found the treasure and won the game.");
-                Environment.Exit(0);
-            }
+            return new Nothing();
         }
 
-        private void GetProblemOnMove()
+        enum ContentOnMove
         {
-            var content = map.MapSquare[player.X, player.Y].Content;
-
-            if (content == 'P')
-            {
-                Console.WriteLine("Game over! You fell into a pit.");
-                Environment.Exit(0);
-            }
-
-            if (content == 'T')
-            {
-                Console.WriteLine("Congratulations! You found the treasure and won the game.");
-                Environment.Exit(0);
-            }
+            FacedWithPit,
+            FacedWithTreasure,
+            FacedWithBat,
+            FacedWithRoom
         }
-    }
+    } 
 }
-            
-

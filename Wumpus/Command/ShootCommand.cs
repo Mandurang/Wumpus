@@ -9,30 +9,38 @@ namespace WumpusWorld.Command
 {
     public class ShootCommand : ICommand, IWumpusEncountered
     {
-        private WumpusWorldGame wumpusWorldGame;
-        private int directionX, directionY;
+        private WumpusWorldGame _wumpusWorldGame;
+        private Direction? _direction;
+        private DirectionVector _directionVector = new DirectionVector();
 
-        public ShootCommand(WumpusWorldGame wumpusWorldGame, int directionX, int directionY)
+        public ShootCommand(WumpusWorldGame wumpusWorldGame, Direction? direction)
         {
-            this.wumpusWorldGame = wumpusWorldGame;
-            this.directionX = directionX;
-            this.directionY = directionY;
+            _wumpusWorldGame = wumpusWorldGame;
+            _direction = direction;
         }
 
         public void Execute()
         {
-            ShootArrow(directionX, directionY, wumpusWorldGame);
+            ShootArrow(_direction, _wumpusWorldGame);
         }
-
-        private void ShootArrow(int directionX, int directionY, WumpusWorldGame wumpusWorldGame)
+        
+        private void ShootArrow(Direction? direction, WumpusWorldGame wumpusWorldGame)
         {
+            DirectionVector directionVector = _directionVector.GetDirection(_direction);
+
+            int playerX = wumpusWorldGame.Player.X;
+            int playerY = wumpusWorldGame.Player.Y;
+
+            int newX = playerX + directionVector.X;
+            int newY = playerY + directionVector.Y;
+
             int wumpusX = wumpusWorldGame.Wumpus.X;
             int wumpusY = wumpusWorldGame.Wumpus.Y;
 
             if (wumpusWorldGame.Player.QuantityArrow > 0)
             {
                 wumpusWorldGame.Player.QuantityArrow--;
-                Encountered(directionX, directionY, wumpusX, wumpusY);
+                Encountered(newX, newY, wumpusX, wumpusY);
             }
             else
             {
